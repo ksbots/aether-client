@@ -1,0 +1,75 @@
+{
+  "name": "aether-launcher",
+  "version": "2.1.1",
+  "description": "Aether Client Launcher",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env AETHER_DEV=true AETHER_FRONTEND_MODE=local electron .",
+    "dev:remote": "cross-env AETHER_DEV=true AETHER_FRONTEND_MODE=remote AETHER_FRONTEND_URL=https://ksbots.github.io/aether-client/ electron .",
+    "build": "electron-builder --win",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "electron-log": "^5.1.2",
+    "electron-store": "8.2.0",
+    "electron-updater": "^6.1.8",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.13.2"
+  },
+  "build": {
+    "appId": "com.aether.client",
+    "productName": "Aether Client",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**/*",
+      "../frontend/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../frontend",
+        "to": "frontend"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Aether Client"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "ksbots",
+      "repo": "aether-client"
+    }
+  }
+}

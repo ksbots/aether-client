@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Aether Client — O launcher definitivo de Minecraft. FPS máximo, mods automáticos, cosméticos exclusivos, suporte Android."/>
+<meta property="og:title" content="Aether Client"/>
+<meta property="og:description" content="O launcher definitivo de Minecraft. Performance máxima, mods automáticos e cosméticos exclusivos."/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#6366f1"/>
+<title>Aether Client — O Launcher Definitivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<canvas id="particles" aria-hidden="true"></canvas>
+
+<!-- ═══ NAVBAR ═══════════════════════════════════════════════════ -->
+<header id="nav" role="banner">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="Aether Client Home">
+      <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#a5b4fc"/><stop offset="100%" stop-color="#7c3aed"/>
+        </linearGradient></defs>
+        <polygon points="32,2 62,18 62,46 32,62 2,46 2,18" fill="url(#lg)"/>
+        <text x="32" y="44" font-family="sans-serif" font-size="29" font-weight="900" text-anchor="middle" fill="white">A</text>
+      </svg>
+      <span>AETHER</span>
+    </a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="#features">Features</a>
+      <a href="#mods">Mods</a>
+      <a href="#cosmetics-sec">Cosméticos</a>
+      <a href="#android">Android</a>
+      <a href="#status">Status</a>
+    </nav>
+    <a href="#download" class="nav-cta">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Download
+    </a>
+    <button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mob-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="mob-menu" id="mob-menu" aria-label="Menu mobile" hidden>
+    <a href="#features"      onclick="closeBurger()">Features</a>
+    <a href="#mods"          onclick="closeBurger()">Mods</a>
+    <a href="#cosmetics-sec" onclick="closeBurger()">Cosméticos</a>
+    <a href="#android"       onclick="closeBurger()">Android</a>
+    <a href="#status"        onclick="closeBurger()">Status</a>
+    <a href="#download"      onclick="closeBurger()" class="mob-cta">↓ Download</a>
+  </nav>
+</header>
+
+<main>
+<!-- ═══ HERO ══════════════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hb-grid"></div>
+    <div class="hb-orb o1"></div>
+    <div class="hb-orb o2"></div>
+    <div class="hb-orb o3"></div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow" data-reveal>
+      <span class="eyebrow-dot" aria-hidden="true"></span>
+      <span id="badge-text">v2.1.1 — Fabric · Mods Automáticos · Cosméticos</span>
+    </div>
+
+    <h1 class="hero-title" data-reveal data-delay="1">
+      O Launcher<br>
+      <em class="hero-em">Definitivo</em><br>
+      <span class="hero-sub-title">para Minecraft</span>
+    </h1>
+
+    <p class="hero-desc" data-reveal data-delay="2">
+      Performance máxima, login Microsoft real, mods instalados automaticamente,
+      cosméticos exclusivos e suporte Android. <strong>100% gratuito e open-source.</strong>
+    </p>
+
+    <!-- DOWNLOAD BLOCK -->
+    <div class="dl-block" id="download" data-reveal data-delay="3">
+      <a href="#" id="main-dl" class="btn-dl-main">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span id="main-dl-label">Download para Windows</span>
+        <span class="dl-badge" id="main-dl-badge">EXE</span>
+      </a>
+
+      <div class="dl-alts">
+        <a href="#" id="alt-win"     class="dl-alt">🪟 Windows</a>
+        <span class="dl-sep" aria-hidden="true">·</span>
+        <a href="#" id="alt-mac"     class="dl-alt">🍎 macOS</a>
+        <span class="dl-sep" aria-hidden="true">·</span>
+        <a href="#" id="alt-linux"   class="dl-alt">🐧 Linux</a>
+        <span class="dl-sep" aria-hidden="true">·</span>
+        <a href="#android" id="alt-android" class="dl-alt">📱 Android</a>
+      </div>
+
+      <p class="dl-note" id="dl-note" aria-live="polite">Verificando versão mais recente...</p>
+    </div>
+
+    <!-- LAUNCHER MOCKUP -->
+    <div class="launcher-mockup" data-reveal data-delay="4" aria-hidden="true" role="presentation">
+      <div class="lm-bar">
+        <div class="lm-dots"><span class="lmd r"></span><span class="lmd y"></span><span class="lmd g"></span></div>
+        <span class="lm-title-bar">Aether Client v2.1.1</span>
+      </div>
+      <div class="lm-body">
+        <aside class="lm-side">
+          <div class="lms-brand">AETHER</div>
+          <div class="lms-item act">🏠 Início</div>
+          <div class="lms-item">📦 Versões</div>
+          <div class="lms-item">👤 Contas</div>
+          <div class="lms-item">🎨 Cosméticos</div>
+          <div class="lms-item">⚙️ Config</div>
+          <div class="lms-java">● Java 17 ✓</div>
+        </aside>
+        <div class="lm-main">
+          <div class="lm-acc">
+            <div class="lm-avatar">A</div>
+            <div>
+              <div class="lm-accname">Player <span class="lm-tag">ORIGINAL</span></div>
+              <div class="lm-uuid">UUID: a4c9d3f2…</div>
+            </div>
+          </div>
+          <div class="lm-cfg">
+            <div class="lm-cfg-card"><div class="lcc-lbl">RAM</div><div class="lcc-val">4 GB</div><div class="lcc-bar"><div class="lcc-fill" style="width:50%"></div></div></div>
+            <div class="lm-cfg-card"><div class="lcc-lbl">VERSÃO</div><div class="lcc-val">1.20.1</div></div>
+          </div>
+          <div class="lm-play">▶ JOGAR</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ════════════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-n" data-count="50000">0</span><span class="stat-l">Downloads</span></div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div class="stat"><span class="stat-n">1.8 → 1.20</span><span class="stat-l">Versões</span></div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div class="stat"><span class="stat-n" data-count="12">0</span><span class="stat-l">Mods Incluídos</span></div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div class="stat"><span class="stat-n">2</span><span class="stat-l">Plataformas</span></div>
+  </div>
+</div>
+
+<!-- ═══ FEATURES ═════════════════════════════════════════════════ -->
+<section class="sec" id="features">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Por que Aether?</p>
+      <h2 class="sec-title">Tudo que você precisa</h2>
+    </div>
+
+    <div class="feat-grid">
+      <article class="feat-card feat-wide" data-reveal>
+        <div class="fc-icon-xl" aria-hidden="true">⚡</div>
+        <h3>FPS Máximo</h3>
+        <p>G1GC tuning, Sodium, Lithium e EntityCulling pré-configurados. Até 3× mais FPS sem configurar nada.</p>
+        <div class="fc-pills"><span>G1GC</span><span>Sodium</span><span>Lithium</span><span>EntityCulling</span></div>
+      </article>
+      <article class="feat-card" data-reveal data-delay="1">
+        <div class="fc-icon" aria-hidden="true">🔐</div>
+        <h3>Login Dual</h3>
+        <p>Microsoft OAuth2 Device Code + Offline. Tokens criptografados com AES-256.</p>
+      </article>
+      <article class="feat-card" data-reveal data-delay="2">
+        <div class="fc-icon" aria-hidden="true">📦</div>
+        <h3>Auto-Mods</h3>
+        <p>Baixa mods do Modrinth com verificação SHA512. Zero configuração manual.</p>
+      </article>
+      <article class="feat-card" data-reveal data-delay="3">
+        <div class="fc-icon" aria-hidden="true">🎨</div>
+        <h3>Cosméticos</h3>
+        <p>Capas, asas, chapéus e mais. Equipe direto no launcher e veja no jogo.</p>
+      </article>
+      <article class="feat-card" data-reveal data-delay="1">
+        <div class="fc-icon" aria-hidden="true">📱</div>
+        <h3>Android</h3>
+        <p>Via PojavLauncher com pack pré-configurado. Jogue Minecraft Java no celular.</p>
+      </article>
+      <article class="feat-card feat-wide" data-reveal data-delay="2">
+        <div class="fc-icon-xl" aria-hidden="true">🔄</div>
+        <h3>Auto-Update</h3>
+        <p>Atualização automática via GitHub Releases com notificação discreta e download em background.</p>
+        <div class="fc-pills"><span>GitHub Releases</span><span>electron-updater</span><span>Background DL</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MODS ══════════════════════════════════════════════════════ -->
+<section class="sec sec-alt" id="mods">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Performance & Gameplay</p>
+      <h2 class="sec-title">12 Mods Incluídos</h2>
+      <p class="sec-sub">Baixados automaticamente via Modrinth com verificação SHA512. Sem instalação manual.</p>
+    </div>
+    <div class="mods-grid" data-reveal>
+      <div class="mod-card"><span class="mod-ic">🟠</span><div><div class="mod-nm">Sodium</div><div class="mod-ds">+200% FPS</div></div></div>
+      <div class="mod-card"><span class="mod-ic">🔵</span><div><div class="mod-nm">Lithium</div><div class="mod-ds">Lógica e ticks</div></div></div>
+      <div class="mod-card"><span class="mod-ic">🟡</span><div><div class="mod-nm">Iris Shaders</div><div class="mod-ds">OptiFine-compat.</div></div></div>
+      <div class="mod-card"><span class="mod-ic">⭐</span><div><div class="mod-nm">Starlight</div><div class="mod-ds">Motor de luz</div></div></div>
+      <div class="mod-card"><span class="mod-ic">🔴</span><div><div class="mod-nm">FerriteCore</div><div class="mod-ds">−30% RAM</div></div></div>
+      <div class="mod-card"><span class="mod-ic">👁</span><div><div class="mod-nm">EntityCulling</div><div class="mod-ds">Entidades fora do FOV</div></div></div>
+      <div class="mod-card"><span class="mod-ic">🔍</span><div><div class="mod-nm">Zoomify</div><div class="mod-ds">Zoom OptiFine</div></div></div>
+      <div class="mod-card"><span class="mod-ic">🗺</span><div><div class="mod-nm">Xaero's Minimap</div><div class="mod-ds">Mapa + mini</div></div></div>
+      <div class="mod-card"><span class="mod-ic">📊</span><div><div class="mod-nm">MiniHUD</div><div class="mod-ds">HUD avançado</div></div></div>
+      <div class="mod-card"><span class="mod-ic">🎬</span><div><div class="mod-nm">ReplayMod</div><div class="mod-ds">Grave sessões</div></div></div>
+      <div class="mod-card"><span class="mod-ic">💡</span><div><div class="mod-nm">LambDynLights</div><div class="mod-ds">Luz dinâmica</div></div></div>
+      <div class="mod-card"><span class="mod-ic">📋</span><div><div class="mod-nm">BetterF3</div><div class="mod-ds">F3 colorido</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COSMÉTICOS ════════════════════════════════════════════════ -->
+<section class="sec" id="cosmetics-sec">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Personalização</p>
+      <h2 class="sec-title">Cosméticos Exclusivos</h2>
+      <p class="sec-sub">Equipe capas, asas, chapéus e mais. Visíveis para outros jogadores com Aether.</p>
+    </div>
+    <div class="cos-showcase" data-reveal>
+      <div class="cos-show-item"><div class="csi-icon" aria-hidden="true">🌊</div><div class="csi-name">Capas</div><div class="csi-sub">Designs exclusivos</div></div>
+      <div class="cos-show-item"><div class="csi-icon" aria-hidden="true">🪶</div><div class="csi-name">Asas</div><div class="csi-sub">Anjo ou Demônio</div></div>
+      <div class="cos-show-item"><div class="csi-icon" aria-hidden="true">👑</div><div class="csi-name">Chapéus</div><div class="csi-sub">Coroa, gorro e mais</div></div>
+      <div class="cos-show-item"><div class="csi-icon" aria-hidden="true">🎭</div><div class="csi-name">Máscaras</div><div class="csi-sub">Bandana, caveira</div></div>
+      <div class="cos-show-item"><div class="csi-icon" aria-hidden="true">🕺</div><div class="csi-name">Emotes</div><div class="csi-sub">Animações únicas</div></div>
+      <div class="cos-show-item"><div class="csi-icon" aria-hidden="true">🏅</div><div class="csi-name">Badges</div><div class="csi-sub">Fundador, Early</div></div>
+    </div>
+
+    <!-- Placeholder para screenshot futura do menu de cosméticos -->
+    <div class="cos-screenshot-placeholder" data-reveal data-delay="1" aria-label="Preview do menu de cosméticos">
+      <div class="csp-inner">
+        <div class="csp-label">MENU DE COSMÉTICOS IN-GAME</div>
+        <div class="csp-preview">
+          <div class="csp-sidebar">
+            <div class="csps-item active">Capas</div>
+            <div class="csps-item">Asas</div>
+            <div class="csps-item">Chapéus</div>
+            <div class="csps-item">Emotes</div>
+          </div>
+          <div class="csp-grid">
+            <div class="csp-card eq">🌊<span>Aether</span><div class="csp-on">ON</div></div>
+            <div class="csp-card">🌑<span>Void</span></div>
+            <div class="csp-card lock">🔒<span>???</span></div>
+            <div class="csp-card lock">🔒<span>???</span></div>
+          </div>
+        </div>
+        <p class="csp-note">Screenshot ilustrativa — menu real disponível no launcher</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ANDROID ═══════════════════════════════════════════════════ -->
+<section class="sec sec-alt" id="android">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Mobile</p>
+      <h2 class="sec-title">Jogue no Android</h2>
+      <p class="sec-sub">Minecraft Java no seu celular, com mods pré-configurados via PojavLauncher.</p>
+    </div>
+
+    <div class="android-layout">
+      <div class="android-steps" data-reveal>
+        <div class="a-step">
+          <div class="a-num" aria-hidden="true">1</div>
+          <div><strong>Instalar PojavLauncher</strong><p>Baixe da Play Store ou GitHub. Gratuito e open-source.</p></div>
+        </div>
+        <div class="a-step">
+          <div class="a-num" aria-hidden="true">2</div>
+          <div><strong>Baixar o Pack Aether Mobile</strong><p>Clique no botão abaixo para baixar o ZIP.</p></div>
+        </div>
+        <div class="a-step">
+          <div class="a-num" aria-hidden="true">3</div>
+          <div><strong>Extrair na pasta versions</strong><p>Copie para <code>Android/data/net.kdt.pojavlaunch/files/.minecraft/versions/</code></p></div>
+        </div>
+        <div class="a-step">
+          <div class="a-num" aria-hidden="true">4</div>
+          <div><strong>Copiar mods</strong><p>Copie os <code>.jar</code> para <code>.minecraft/mods/</code></p></div>
+        </div>
+        <div class="a-step">
+          <div class="a-num" aria-hidden="true">5</div>
+          <div><strong>Selecionar e Jogar</strong><p>Selecione <code>Aether-Client-1.20.1</code> no PojavLauncher.</p></div>
+        </div>
+
+        <a href="#" id="android-dl" class="btn-android">
+          <span aria-hidden="true">📱</span>
+          Baixar Pack Android (ZIP)
+        </a>
+      </div>
+
+      <div class="android-card" data-reveal data-delay="1">
+        <div class="ac-icon" aria-hidden="true">📱</div>
+        <h3>Requisitos</h3>
+        <ul class="ac-list">
+          <li><span aria-hidden="true">✓</span> Android 8.0 ou superior</li>
+          <li><span aria-hidden="true">✓</span> 2 GB RAM mínimo</li>
+          <li><span aria-hidden="true">✓</span> 1 GB de espaço livre</li>
+          <li><span aria-hidden="true">✓</span> Java 17 via PojavLauncher</li>
+        </ul>
+        <div class="ac-note">
+          O PojavLauncher inclui Java — não é necessário instalar separado.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PC ════════════════════════════════════════════════════════ -->
+<section class="sec" id="pc">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Desktop</p>
+      <h2 class="sec-title">Versão para PC</h2>
+      <p class="sec-sub">Windows, macOS e Linux. Interface nativa com Electron, sem abrir o navegador.</p>
+    </div>
+
+    <div class="pc-cards" data-reveal>
+      <div class="pc-card pc-win">
+        <div class="pcc-icon" aria-hidden="true">🪟</div>
+        <h3>Windows</h3>
+        <p>Instalador NSIS (.exe). Windows 10/11 x64.</p>
+        <a href="#" id="pc-win-dl" class="pcc-btn">Baixar .exe</a>
+      </div>
+      <div class="pc-card pc-mac">
+        <div class="pcc-icon" aria-hidden="true">🍎</div>
+        <h3>macOS</h3>
+        <p>Pacote DMG. macOS 11+ (Intel e Apple Silicon).</p>
+        <a href="#" id="pc-mac-dl" class="pcc-btn">Baixar .dmg</a>
+      </div>
+      <div class="pc-card pc-linux">
+        <div class="pcc-icon" aria-hidden="true">🐧</div>
+        <h3>Linux</h3>
+        <p>AppImage universal. Ubuntu, Fedora, Arch e mais.</p>
+        <a href="#" id="pc-linux-dl" class="pcc-btn">Baixar .AppImage</a>
+      </div>
+    </div>
+    <p class="pc-note" data-reveal data-delay="1">
+      Todos os downloads são assinados e distribuídos via
+      <a href="https://github.com/ksbots/aether-client/releases" target="_blank" rel="noopener">GitHub Releases</a>.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ STATUS ════════════════════════════════════════════════════ -->
+<section class="sec sec-alt" id="status">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Serviços</p>
+      <h2 class="sec-title">Status em Tempo Real</h2>
+    </div>
+    <div class="status-grid" id="status-grid" data-reveal aria-live="polite">
+      <div class="status-loading">
+        <span class="spin" aria-hidden="true"></span> Verificando serviços...
+      </div>
+    </div>
+    <p class="status-ts" id="status-ts">—</p>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══════════════════════════════════════════════════════ -->
+<section class="sec" id="faq">
+  <div class="sec-inner">
+    <div class="sec-head" data-reveal>
+      <p class="sec-eye">Dúvidas</p>
+      <h2 class="sec-title">FAQ</h2>
+    </div>
+    <div class="faq-list" data-reveal>
+      <details class="faq-item">
+        <summary>O Aether Client é gratuito?</summary>
+        <p>Sim, totalmente gratuito e open-source. O código está disponível no GitHub.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Precisa de conta original?</summary>
+        <p>Não. Há suporte a conta offline (apelido livre) e conta Microsoft original. Com Microsoft, você acessa servidores como Hypixel.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O launcher instala mods automaticamente?</summary>
+        <p>Sim. Ao iniciar o Minecraft, os mods são baixados do Modrinth com verificação de integridade SHA512.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Os cosméticos são visíveis para outros jogadores?</summary>
+        <p>Visíveis para outros jogadores que também usam o Aether Client. Suporte multiplayer a outros clients está em desenvolvimento.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O Android usa Minecraft Java?</summary>
+        <p>Sim, via PojavLauncher. Você joga a versão Java com mods Fabric no seu Android.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como atualizar o launcher?</summary>
+        <p>O launcher verifica atualizações automaticamente via GitHub Releases e notifica quando uma nova versão está disponível.</p>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">AETHER</span>
+      <p>Launcher open-source, gratuito e sem anúncios.<br>Feito com ❤️ no Brasil.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do rodapé">
+      <div>
+        <p class="fl-head">Projeto</p>
+        <a href="https://github.com/ksbots/aether-client" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/ksbots/aether-client/releases" target="_blank" rel="noopener">Releases</a>
+        <a href="https://github.com/ksbots/aether-client/issues" target="_blank" rel="noopener">Suporte</a>
+      </div>
+      <div>
+        <p class="fl-head">Download</p>
+        <a href="#" id="fl-win">Windows (.exe)</a>
+        <a href="#" id="fl-mac">macOS (.dmg)</a>
+        <a href="#" id="fl-linux">Linux (.AppImage)</a>
+        <a href="#" id="fl-android">Android (ZIP)</a>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Aether Client · Não afiliado à Mojang ou Microsoft · Minecraft® é marca da Mojang AB</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

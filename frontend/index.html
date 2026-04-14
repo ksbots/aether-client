@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>Aether Client</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body data-page="home">
+
+<!-- ══ TITLEBAR (frame: false) ══════════════════════════════════ -->
+<div id="titlebar" class="titlebar">
+  <div class="tb-drag"></div>
+  <div class="tb-brand">AETHER CLIENT</div>
+  <div class="tb-controls">
+    <button onclick="window.aether?.window.minimize()" title="Minimizar" aria-label="Minimizar">─</button>
+    <button id="btn-maximize" onclick="toggleMaximize()" title="Maximizar" aria-label="Maximizar">□</button>
+    <button class="tb-close" onclick="window.aether?.window.close()" title="Fechar" aria-label="Fechar">✕</button>
+  </div>
+</div>
+
+<!-- ══ LAYOUT PRINCIPAL ═════════════════════════════════════════ -->
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#7c3aed"/>
+        </linearGradient></defs>
+        <polygon points="32,3 61,18 61,46 32,61 3,46 3,18" fill="url(#sg)"/>
+        <text x="32" y="43" font-family="sans-serif" font-size="28" font-weight="900" text-anchor="middle" fill="white">A</text>
+      </svg>
+      <span>AETHER</span>
+    </div>
+
+    <nav class="sb-nav" aria-label="Menu do launcher">
+      <button class="sb-item active" data-page="home"       onclick="setPage('home')">
+        <span class="sb-icon" aria-hidden="true">🏠</span><span>Início</span>
+      </button>
+      <button class="sb-item" data-page="versions"  onclick="setPage('versions')">
+        <span class="sb-icon" aria-hidden="true">📦</span><span>Versões</span>
+      </button>
+      <button class="sb-item" data-page="accounts"  onclick="setPage('accounts')">
+        <span class="sb-icon" aria-hidden="true">👤</span><span>Contas</span>
+      </button>
+      <button class="sb-item" data-page="cosmetics" onclick="setPage('cosmetics')">
+        <span class="sb-icon" aria-hidden="true">🎨</span><span>Cosméticos</span>
+      </button>
+      <button class="sb-item" data-page="settings"  onclick="setPage('settings')">
+        <span class="sb-icon" aria-hidden="true">⚙️</span><span>Config</span>
+      </button>
+    </nav>
+
+    <div class="sb-footer">
+      <div class="sb-status-dot" id="api-dot" title="Status do backend"></div>
+      <span class="sb-version" id="sb-version">v2.1.1</span>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content" id="content">
+
+    <!-- ══ PÁGINA: HOME ═════════════════════════════════════════ -->
+    <section class="page active" id="page-home">
+      <div class="page-header">
+        <h1>Bem-vindo de volta</h1>
+        <p class="page-sub" id="home-greeting">Pronto para jogar?</p>
+      </div>
+
+      <div class="home-account-card" id="home-account">
+        <div class="hac-avatar" id="hac-avatar">?</div>
+        <div class="hac-info">
+          <div class="hac-name" id="hac-name">Nenhuma conta</div>
+          <div class="hac-type" id="hac-type">—</div>
+        </div>
+        <button class="hac-switch" onclick="setPage('accounts')">Trocar</button>
+      </div>
+
+      <div class="home-config">
+        <div class="cfg-row">
+          <label class="cfg-label" for="ram-select">RAM alocada</label>
+          <select id="ram-select" class="cfg-select" onchange="saveConfig()">
+            <option value="1024">1 GB</option>
+            <option value="2048">2 GB</option>
+            <option value="4096" selected>4 GB</option>
+            <option value="6144">6 GB</option>
+            <option value="8192">8 GB</option>
+            <option value="12288">12 GB</option>
+            <option value="16384">16 GB</option>
+          </select>
+        </div>
+        <div class="cfg-row">
+          <label class="cfg-label" for="ver-select">Versão do Minecraft</label>
+          <select id="ver-select" class="cfg-select" onchange="saveConfig()">
+            <option value="1.20.1" selected>1.20.1 (Fabric)</option>
+            <option value="1.19.4">1.19.4 (Fabric)</option>
+            <option value="1.18.2">1.18.2 (Fabric)</option>
+            <option value="1.16.5">1.16.5 (Fabric)</option>
+            <option value="1.8.9">1.8.9 (Legacy)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="home-cosmetic-preview" id="home-cos-preview">
+        <div class="hcp-label">Cosmético equipado</div>
+        <div class="hcp-name" id="hcp-name">Nenhum</div>
+      </div>
+
+      <button class="btn-play" id="btn-play" onclick="launchGame()">
+        <span class="play-icon" aria-hidden="true">▶</span>
+        <span id="play-label">JOGAR</span>
+      </button>
+
+      <div class="launch-log" id="launch-log" hidden>
+        <div class="log-line" id="log-text">Preparando...</div>
+      </div>
+
+      <div class="status-strip" id="status-strip">
+        <div class="ss-item"><div class="ss-dot online" id="dot-auth"></div><span>Auth</span></div>
+        <div class="ss-item"><div class="ss-dot online" id="dot-session"></div><span>Session</span></div>
+        <div class="ss-item"><div class="ss-dot online" id="dot-ms"></div><span>Microsoft</span></div>
+        <div class="ss-item"><div class="ss-dot" id="dot-mc"></div><span>MC Services</span></div>
+      </div>
+    </section>
+
+    <!-- ══ PÁGINA: VERSÕES ══════════════════════════════════════ -->
+    <section class="page" id="page-versions">
+      <div class="page-header">
+        <h1>Versões</h1>
+        <p class="page-sub">Selecione a versão para jogar</p>
+      </div>
+      <div class="versions-list">
+        <div class="ver-card active-ver">
+          <div class="ver-badge">RECOMENDADO</div>
+          <div class="ver-title">Aether Client 1.20.1</div>
+          <div class="ver-sub">Fabric 0.15.x · 12 mods de performance</div>
+          <div class="ver-tags"><span>Sodium</span><span>Iris</span><span>Lithium</span><span>+9</span></div>
+          <button class="ver-select-btn" onclick="selectVersion('1.20.1')">Selecionar</button>
+        </div>
+        <div class="ver-card">
+          <div class="ver-title">Aether Client 1.19.4</div>
+          <div class="ver-sub">Fabric 0.14.x · Mods estáveis</div>
+          <div class="ver-tags"><span>Sodium</span><span>Lithium</span></div>
+          <button class="ver-select-btn" onclick="selectVersion('1.19.4')">Selecionar</button>
+        </div>
+        <div class="ver-card">
+          <div class="ver-title">Aether Client 1.8.9</div>
+          <div class="ver-sub">Legacy · Otimizado para PvP</div>
+          <div class="ver-tags"><span>OptiFine</span><span>Legacy</span></div>
+          <button class="ver-select-btn" onclick="selectVersion('1.8.9')">Selecionar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PÁGINA: CONTAS ═══════════════════════════════════════ -->
+    <section class="page" id="page-accounts">
+      <div class="page-header">
+        <h1>Contas</h1>
+        <p class="page-sub">Gerencie suas contas do Minecraft</p>
+      </div>
+
+      <div class="accounts-list" id="accounts-list">
+        <!-- preenchido via JS -->
+      </div>
+
+      <div class="add-account-buttons">
+        <button class="btn-add-ms" onclick="openMicrosoftLogin()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="2" y="2" width="9" height="9" fill="#f25022"/>
+            <rect x="13" y="2" width="9" height="9" fill="#7fba00"/>
+            <rect x="2" y="13" width="9" height="9" fill="#00a4ef"/>
+            <rect x="13" y="13" width="9" height="9" fill="#ffb900"/>
+          </svg>
+          Adicionar Conta Microsoft
+        </button>
+        <button class="btn-add-offline" onclick="showOfflineForm()">
+          💀 Adicionar Conta Offline
+        </button>
+      </div>
+
+      <div class="offline-form" id="offline-form" hidden>
+        <input type="text" id="offline-nick" placeholder="Seu apelido" maxlength="16" class="offline-input"/>
+        <button onclick="addOfflineAccount()" class="btn-confirm-offline">Adicionar</button>
+      </div>
+    </section>
+
+    <!-- ══ PÁGINA: COSMÉTICOS ═══════════════════════════════════ -->
+    <section class="page" id="page-cosmetics">
+      <div class="page-header">
+        <h1>Cosméticos</h1>
+        <p class="page-sub">Personalize seu personagem</p>
+      </div>
+
+      <div class="cosmetics-layout">
+        <!-- Categorias -->
+        <nav class="cos-categories" aria-label="Categorias de cosméticos">
+          <button class="cos-cat active" data-cat="all"     onclick="filterCosmetics('all')">Todos</button>
+          <button class="cos-cat"        data-cat="capes"   onclick="filterCosmetics('capes')">🌊 Capas</button>
+          <button class="cos-cat"        data-cat="wings"   onclick="filterCosmetics('wings')">🪶 Asas</button>
+          <button class="cos-cat"        data-cat="hats"    onclick="filterCosmetics('hats')">🎩 Chapéus</button>
+          <button class="cos-cat"        data-cat="masks"   onclick="filterCosmetics('masks')">🎭 Máscaras</button>
+          <button class="cos-cat"        data-cat="emotes"  onclick="filterCosmetics('emotes')">🕺 Emotes</button>
+          <button class="cos-cat"        data-cat="badges"  onclick="filterCosmetics('badges')">🏅 Badges</button>
+        </nav>
+
+        <!-- Grade de cosméticos -->
+        <div class="cos-grid" id="cos-grid" aria-label="Lista de cosméticos">
+          <!-- preenchido via JS -->
+        </div>
+
+        <!-- Preview e equipar -->
+        <div class="cos-preview" id="cos-preview">
+          <div class="cp-placeholder" id="cp-placeholder">
+            <div class="cp-ph-icon" aria-hidden="true">🎨</div>
+            <p>Selecione um cosmético para visualizar</p>
+          </div>
+          <div class="cp-detail" id="cp-detail" hidden>
+            <div class="cp-icon" id="cp-icon" aria-hidden="true"></div>
+            <div class="cp-name" id="cp-name"></div>
+            <div class="cp-rarity" id="cp-rarity"></div>
+            <div class="cp-cat"   id="cp-cat"></div>
+            <button class="cp-equip-btn" id="cp-equip-btn" onclick="equipSelected()">Equipar</button>
+            <button class="cp-unequip-btn" id="cp-unequip-btn" onclick="unequipCosmetic()" hidden>Desequipar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PÁGINA: CONFIG ════════════════════════════════════════ -->
+    <section class="page" id="page-settings">
+      <div class="page-header">
+        <h1>Configurações</h1>
+        <p class="page-sub">Personalize o launcher</p>
+      </div>
+
+      <div class="settings-list">
+        <div class="setting-item">
+          <div>
+            <div class="si-title">Diretório do Minecraft</div>
+            <div class="si-val" id="mc-dir-val">Padrão</div>
+          </div>
+          <button class="si-btn" onclick="chooseMcDir()">Alterar</button>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="si-title">Java Args extras</div>
+            <div class="si-val">G1GC + otimizações automáticas</div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="si-title">Tema</div>
+            <div class="si-val">Escuro (padrão)</div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="si-title">Versão do launcher</div>
+            <div class="si-val" id="cfg-launcher-ver">v2.1.1</div>
+          </div>
+          <button class="si-btn" onclick="window.aether?.updater.check()">Verificar update</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══ MODAL: MICROSOFT LOGIN ═══════════════════════════════════ -->
+<div class="modal-overlay" id="ms-modal" role="dialog" aria-modal="true" aria-labelledby="ms-modal-title" hidden>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeMsModal()" aria-label="Fechar">✕</button>
+    <div class="modal-icon" aria-hidden="true">🔷</div>
+    <h2 id="ms-modal-title">Login Microsoft</h2>
+    <p class="modal-sub">Acesse o link e insira o código:</p>
+
+    <div id="ms-step-code" class="modal-step">
+      <div class="ms-code-display" id="ms-code" aria-live="polite">• • • • • •</div>
+      <a href="#" id="ms-link" class="ms-link" target="_blank" rel="noopener noreferrer">
+        Abrir microsoft.com/devicelogin ↗
+      </a>
+      <p class="ms-hint" id="ms-hint" aria-live="polite">Solicitando código...</p>
+    </div>
+    <div id="ms-step-success" class="modal-step modal-success" hidden>
+      <div class="success-icon" aria-hidden="true">✅</div>
+      <h3>Login realizado!</h3>
+      <p id="ms-success-name">Bem-vindo!</p>
+    </div>
+    <div id="ms-step-error" class="modal-step modal-error" hidden>
+      <div class="error-icon" aria-hidden="true">❌</div>
+      <p id="ms-error-msg">Erro desconhecido</p>
+      <button class="btn-retry" onclick="openMicrosoftLogin()">Tentar novamente</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ═════════════════════════════════════════════════════ -->
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="script.js"></script>
+</body>
+</html>
