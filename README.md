@@ -132,3 +132,4 @@ Raridades: `common`, `rare`, `epic`, `legendary`, `exclusive`
 - [ ] Site é responsivo em mobile
 - [ ] Partículas e animações funcionam
 - [ ] Status dos serviços Mojang aparece em tempo real
+"# aether-client" 
