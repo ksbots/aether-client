@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <radialGradient id="bgMain" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0d0d28"/>
+      <stop offset="100%" stop-color="#020208"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#bgMain)"/>
+  <g opacity="0.5">
+    <circle cx="86.1" cy="146.6" r="0.6" fill="white" opacity="0.50"/>
+    <circle cx="30.3" cy="13.1" r="0.9" fill="white" opacity="0.37"/>
+    <circle cx="97.1" cy="218.2" r="0.6" fill="white" opacity="0.67"/>
+    <circle cx="47.8" cy="232.6" r="1.6" fill="white" opacity="0.43"/>
+    <circle cx="247.5" cy="210.8" r="0.6" fill="white" opacity="0.54"/>
+    <circle cx="206.1" cy="268.4" r="0.8" fill="white" opacity="0.45"/>
+    <circle cx="227.0" cy="279.5" r="0.6" fill="white" opacity="0.35"/>
+    <circle cx="220.3" cy="98.8" r="1.1" fill="white" opacity="0.83"/>
+    <circle cx="218.8" cy="195.0" r="1.8" fill="white" opacity="0.74"/>
+    <circle cx="236.9" cy="190.1" r="1.4" fill="white" opacity="0.34"/>
+    <circle cx="264.7" cy="265.3" r="1.0" fill="white" opacity="0.68"/>
+    <circle cx="14.7" cy="150.0" r="1.4" fill="white" opacity="0.48"/>
+    <circle cx="126.1" cy="243.9" r="0.7" fill="white" opacity="0.57"/>
+    <circle cx="34.2" cy="117.6" r="1.8" fill="white" opacity="0.67"/>
+    <circle cx="18.1" cy="250.4" r="1.5" fill="white" opacity="0.61"/>
+    <circle cx="90.8" cy="94.2" r="0.8" fill="white" opacity="0.67"/>
+    <circle cx="23.9" cy="274.5" r="0.7" fill="white" opacity="0.67"/>
+    <circle cx="171.3" cy="111.4" r="0.9" fill="white" opacity="0.56"/>
+    <circle cx="102.2" cy="282.0" r="1.5" fill="white" opacity="0.61"/>
+    <circle cx="195.7" cy="148.3" r="0.7" fill="white" opacity="0.31"/>
+    <circle cx="281.6" cy="246.4" r="0.6" fill="white" opacity="0.67"/>
+    <circle cx="229.8" cy="260.4" r="0.6" fill="white" opacity="0.38"/>
+    <circle cx="119.8" cy="178.8" r="0.6" fill="white" opacity="0.72"/>
+    <circle cx="221.3" cy="135.1" r="1.8" fill="white" opacity="0.53"/>
+    <circle cx="243.4" cy="117.0" r="1.1" fill="white" opacity="0.53"/>
+    <circle cx="208.8" cy="257.2" r="0.6" fill="white" opacity="0.65"/>
+    <circle cx="244.0" cy="203.8" r="0.9" fill="white" opacity="0.52"/>
+    <circle cx="258.1" cy="70.4" r="1.9" fill="white" opacity="0.54"/>
+    <circle cx="155.7" cy="208.3" r="1.5" fill="white" opacity="0.65"/>
+    <circle cx="252.9" cy="189.3" r="1.9" fill="white" opacity="0.69"/>
+    <circle cx="174.6" cy="25.9" r="1.9" fill="white" opacity="0.44"/>
+    <circle cx="73.2" cy="23.8" r="1.4" fill="white" opacity="0.52"/>
+    <circle cx="192.7" cy="237.8" r="1.9" fill="white" opacity="0.78"/>
+    <circle cx="244.8" cy="116.7" r="0.6" fill="white" opacity="0.76"/>
+    <circle cx="288.6" cy="139.6" r="1.8" fill="white" opacity="0.64"/>
+  </g>
+  <defs>
+    <radialGradient id="crg1" cx="150" cy="110" r="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e0a3c"/>
+      <stop offset="100%" stop-color="#0a0a1a"/>
+    </radialGradient>
+    <radialGradient id="crglow" cx="150" cy="110" r="65" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="rgba(109,40,217,0.75)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="crf" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="11" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2.5 0" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="150" cy="110" r="65" fill="url(#crglow)" opacity="0.3"/>
+  <g fill="#1a1a2e" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1">
+    <rect x="138.0" y="152.0" width="24.0" height="24.0"/>
+    <rect x="138.0" y="176.0" width="24.0" height="32.0"/>
+    <rect x="130.0" y="176.0" width="8.0" height="28.0"/>
+    <rect x="162.0" y="176.0" width="8.0" height="28.0"/>
+    <rect x="138.0" y="208.0" width="11.0" height="28.0"/>
+    <rect x="151.0" y="208.0" width="11.0" height="28.0"/>
+  </g>
+  <rect x="108" y="130" width="84" height="22" rx="4" fill="url(#crg1)" filter="url(#crf)"/>
+  <polygon points="110,130 120,130 115,90" fill="#1e0a3c" filter="url(#crf)"/>
+  <polygon points="130,130 140,130 135,105" fill="#1e0a3c" filter="url(#crf)"/>
+  <polygon points="150,130 160,130 155,80" fill="#1e0a3c" filter="url(#crf)"/>
+  <polygon points="170,130 180,130 175,105" fill="#1e0a3c" filter="url(#crf)"/>
+  <polygon points="190,130 200,130 195,90" fill="#1e0a3c" filter="url(#crf)"/>
+  <circle cx="128" cy="118" r="6" fill="#a855f7" filter="url(#crf)"/>
+  <circle cx="150" cy="118" r="6" fill="#ffffff" filter="url(#crf)"/>
+  <circle cx="172" cy="118" r="6" fill="#a855f7" filter="url(#crf)"/>
+  <rect x="0" y="265" width="300" height="35" fill="#050510" opacity="0.85"/>
+  <text x="150" y="281" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#ef4444">Void Crown</text>
+  <text x="150" y="294" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#ef4444">MYTHIC</text>
+  <rect x="1" y="1" width="298" height="298" rx="10" fill="none" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+</svg>

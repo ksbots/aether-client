@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<defs><filter id="g"><feGaussianBlur stdDeviation="1.5"/></filter></defs>
+<line x1="16" y1="4" x2="16" y2="20" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/><polyline points="9,13 16,20 23,13" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="4" y1="27" x2="28" y2="27" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

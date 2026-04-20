@@ -1,0 +1,42 @@
+plugins {
+    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group   = project.maven_group
+
+repositories {
+    maven { url 'https://maven.legacyfabric.net' }
+    maven { url 'https://repo.legacyfabric.net/repository/legacyfabric' }
+    mavenCentral()
+}
+
+dependencies {
+    // LegacyFabric for 1.8.9
+    minecraft 'com.mojang:minecraft:1.8.9'
+    mappings  "net.legacyfabric:yarn:1.8.9+build.207:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.16.9"
+    // No Fabric API for 1.8.9 (not compatible) — use raw Mixin
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 8
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+jar {
+    from('LICENSE') { rename { "${it}_${project.archivesBaseName}" } }
+}

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy"
+  content="default-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data:;">
+<title>Aether Client Launcher</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#03020e;--panel:#0a0720;--card:#100c26;--card2:#160f32;
+  --bd:rgba(124,58,237,.2);--bd2:rgba(168,85,247,.45);
+  --purple:#7c3aed;--purpll:#a855f7;--cyan:#22d3ee;
+  --gold:#f59e0b;--green:#10b981;--red:#ef4444;
+  --text:#ede9fe;--dim:#8b7cb0;--muted:#3d2f60;
+  --glow:0 0 28px rgba(124,58,237,.5);--glow-sm:0 0 12px rgba(124,58,237,.32);
+  --fh:'Rajdhani','Arial Black',sans-serif;--fb:'Outfit',Arial,sans-serif;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--fb);color:var(--text);background:var(--bg);display:flex;flex-direction:column;user-select:none}
+.lbg{position:fixed;inset:0;z-index:0;background-image:url('../assets/bg/launcher-bg.svg');background-size:cover;background-position:center;pointer-events:none}
+
+/* ── TITLEBAR ────────────────────────────────────── */
+#tb{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;-webkit-app-region:drag;background:rgba(3,2,14,.96);border-bottom:1px solid var(--bd);flex-shrink:0;position:relative;z-index:10}
+.tb-logo{display:flex;align-items:center;gap:8px;font-family:var(--fh);font-size:.84rem;font-weight:700;letter-spacing:.08em}
+.tb-logo img{width:20px;height:20px}
+.tb-ver{font-size:.7rem;color:var(--dim)}
+.wbtns{display:flex;gap:2px;-webkit-app-region:no-drag}
+.wbtn{width:28px;height:28px;border:none;background:transparent;color:var(--dim);cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.78rem;transition:background .15s,color .15s}
+.wbtn:hover{background:rgba(255,255,255,.08);color:var(--text)}
+#wc:hover{background:var(--red)!important;color:#fff}
+.wbtn img{width:13px;height:13px;pointer-events:none;filter:brightness(.6)}
+.wbtn:hover img{filter:brightness(.9)}
+
+/* ── APP ─────────────────────────────────────────── */
+#app{flex:1;display:flex;overflow:hidden;position:relative;z-index:1}
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+#sb{width:208px;display:flex;flex-direction:column;background:rgba(10,7,32,.93);border-right:1px solid var(--bd);flex-shrink:0;backdrop-filter:blur(14px)}
+#sb-brand{padding:16px 14px 13px;border-bottom:1px solid var(--bd)}
+#sb-brand h1{font-family:var(--fh);font-size:1.3rem;font-weight:700;background:linear-gradient(135deg,#fff 30%,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#sb-brand p{font-size:.6rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+#nav{flex:1;padding:10px 8px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;font-size:.82rem;font-weight:500;color:var(--dim);cursor:pointer;border:1px solid transparent;transition:all .18s;margin-bottom:3px}
+.ni img{width:15px;height:15px;flex-shrink:0;filter:brightness(.55)}
+.ni:hover{color:var(--text);background:rgba(124,58,237,.1);border-color:var(--bd)}
+.ni:hover img,.ni.active img{filter:brightness(.9)}
+.ni.active{color:var(--purpll);background:rgba(124,58,237,.16);border-color:var(--bd)}
+#sb-foot{padding:10px 8px;border-top:1px solid var(--bd)}
+#srv{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:9px;background:var(--card);border:1px solid var(--bd);font-size:.72rem;color:var(--dim)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+.dot.off{background:var(--red);box-shadow:0 0 6px var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* ── CONTENT ─────────────────────────────────────── */
+#content{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+#content::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 50% at 70% 30%,rgba(76,29,149,.18) 0%,transparent 70%),radial-gradient(ellipse 30% 30% at 10% 80%,rgba(30,58,138,.13) 0%,transparent 60%)}
+#content>*{position:relative;z-index:1}
+
+/* ── PAGES ───────────────────────────────────────── */
+.page{display:none;flex:1;overflow-y:auto;padding:20px;flex-direction:column}
+.page.active{display:flex}
+.pg-title{font-family:var(--fh);font-size:1.42rem;font-weight:700;margin-bottom:16px}
+
+/* ── HOME ────────────────────────────────────────── */
+.acc-card{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.acc-card img.head{width:52px;height:52px;border-radius:9px;border:2px solid var(--bd);image-rendering:pixelated;background:var(--panel)}
+.acc-name{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:3px}
+.badges{display:flex;gap:5px;flex-wrap:wrap}
+.bdg{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px}
+.b-ms {background:rgba(0,120,215,.18);color:#60a5fa;border:1px solid rgba(0,120,215,.28)}
+.b-off{background:rgba(156,163,175,.1);color:#9ca3af;border:1px solid rgba(156,163,175,.22)}
+.b-own{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.28)}
+.b-vip{background:rgba(16,185,129,.15);color:#10b981;border:1px solid rgba(16,185,129,.28)}
+.lctrls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.lctrl label{display:block;font-size:.68rem;color:var(--dim);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.lctrl select{width:100%;background:var(--panel);border:1px solid var(--bd);border-radius:8px;padding:8px 11px;color:var(--text);font-size:.81rem;outline:none;transition:border-color .18s}
+.lctrl select:focus{border-color:var(--bd2)}
+.lctrl select option{background:var(--panel)}
+#ram-info{font-size:.7rem;color:var(--dim);margin-bottom:11px}
+#ram-info b{color:var(--green)}
+#btn-play{width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);border:none;border-radius:12px;color:#fff;font-family:var(--fh);font-size:1.3rem;font-weight:700;letter-spacing:.08em;cursor:pointer;box-shadow:var(--glow);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:11px;transition:transform .2s,box-shadow .2s,background .2s}
+#btn-play:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 44px rgba(124,58,237,.7);background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+#btn-play:disabled{opacity:.5;cursor:not-allowed;transform:none}
+#btn-play img{width:18px;height:18px;filter:brightness(2)}
+#prog-wrap{display:none;margin-bottom:11px}
+#prog-label{font-size:.74rem;color:var(--dim);margin-bottom:5px}
+#prog-bar{height:3px;background:var(--panel);border-radius:100px;overflow:hidden}
+#prog-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--purpll));width:0%;transition:width .3s}
+.news-ttl{font-family:var(--fh);font-size:.86rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:8px}
+.news-list{display:flex;flex-direction:column;gap:8px}
+.news-item{border-radius:10px;overflow:hidden;border:1px solid var(--bd);cursor:pointer;transition:border-color .2s,transform .2s}
+.news-item:hover{border-color:var(--bd2);transform:translateY(-2px)}
+.news-item img{width:100%;display:block;height:auto}
+
+/* ── ACCOUNTS ────────────────────────────────────── */
+#acc-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.ar{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;transition:border-color .18s}
+.ar:hover{border-color:var(--bd2)}
+.ar img{width:38px;height:38px;border-radius:7px;image-rendering:pixelated;border:1px solid var(--bd)}
+.arn{font-family:var(--fh);font-weight:700;font-size:.95rem}
+.ars{font-size:.7rem;color:var(--dim);display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.sbtn{padding:5px 12px;border-radius:7px;border:1px solid var(--bd);background:transparent;color:var(--dim);cursor:pointer;font-size:.73rem;font-family:var(--fb);transition:all .18s;white-space:nowrap}
+.sbtn:hover{border-color:var(--bd2);color:var(--text)}
+.sbtn.primary{background:var(--purple);border-color:var(--purple);color:#fff}
+.sbtn.sel{border-color:var(--purpll);color:var(--purpll)}
+.sbtn.del:hover{border-color:rgba(239,68,68,.4);color:var(--red)}
+.add-tabs{display:flex;gap:6px;margin-bottom:12px}
+.add-pane{display:none;flex-direction:column;gap:9px}
+.add-pane.active{display:flex}
+.add-panel{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:9px}
+.inp{background:var(--panel);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;color:var(--text);font-size:.82rem;outline:none;transition:border-color .18s;font-family:var(--fb);width:100%}
+.inp:focus{border-color:var(--bd2)}.inp::placeholder{color:var(--muted)}
+.btn-purp{background:var(--purple);color:#fff;font-size:.82rem;font-weight:700;padding:10px 18px;border-radius:9px;border:none;cursor:pointer;transition:background .18s;letter-spacing:.04em;text-transform:uppercase;font-family:var(--fb)}
+.btn-purp:hover{background:var(--purpll)}
+#dc-box{background:var(--panel);border:1px solid var(--bd2);border-radius:11px;padding:16px;text-align:center;display:none}
+#dc-val{font-family:var(--fh);font-size:1.8rem;font-weight:700;letter-spacing:.22em;color:var(--purpll);text-shadow:0 0 16px rgba(168,85,247,.5);margin:9px 0}
+#dc-url a{color:var(--purpll);font-size:.74rem}
+#dc-status{font-size:.75rem;color:var(--dim);margin-top:6px}
+
+/* ── COSMETICS ───────────────────────────────────── */
+.cosm-toolbar{display:flex;gap:7px;margin-bottom:13px;flex-wrap:wrap}
+.csearch{flex:1;min-width:160px;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 11px;color:var(--text);font-size:.8rem;outline:none;transition:border-color .18s;font-family:var(--fb)}
+.csearch:focus{border-color:var(--bd2)}.csearch::placeholder{color:var(--muted)}
+.ccats{display:flex;gap:5px;flex-wrap:wrap}
+.ccat{font-size:.71rem;font-weight:600;color:var(--dim);padding:5px 11px;border-radius:100px;background:transparent;border:1px solid var(--bd);cursor:pointer;transition:all .18s;white-space:nowrap}
+.ccat:hover{color:var(--text);border-color:var(--bd2)}
+.ccat.active{background:var(--purple);border-color:var(--purple);color:#fff}
+.cosm-body{display:grid;grid-template-columns:1fr 240px;gap:12px;flex:1;min-height:0}
+.cosm-grid-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px;align-content:start;overflow-y:auto;max-height:calc(100vh - 260px)}
+.lc{background:var(--card);border:1px solid var(--bd);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s}
+.lc:hover{transform:translateY(-3px);border-color:var(--bd2)}
+.lc.sel{border-color:var(--purpll);box-shadow:0 0 10px rgba(168,85,247,.28)}
+.lc.eq{border-color:var(--green);box-shadow:0 0 8px rgba(16,185,129,.22)}
+.lc-img{height:118px;overflow:hidden;position:relative}
+.lc-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.lc:hover .lc-img img{transform:scale(1.06)}
+.lc-strip{height:2px}
+.ls-mythic{background:#ef4444}.ls-legendary{background:linear-gradient(90deg,#f59e0b,#fbbf24)}.ls-epic{background:#a855f7}.ls-elite{background:#3b82f6}.ls-celestial{background:linear-gradient(90deg,#22d3ee,#a5f3fc)}.ls-premium{background:#10b981}.ls-standard{background:#6b7280}.ls-exclusive{background:linear-gradient(90deg,#f59e0b,#fff,#f59e0b)}
+.lc-info{padding:7px 8px 6px}
+.lc-name{font-family:var(--fh);font-size:.79rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-sub{font-size:.6rem;color:var(--dim);margin-top:1px}
+.lc-price{font-family:var(--fh);font-size:.76rem;font-weight:700;color:var(--purpll);margin-top:4px}
+.eq-badge{font-size:.52rem;font-weight:700;text-transform:uppercase;padding:1px 5px;border-radius:3px;background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3);margin-left:4px}
+/* Detail panel */
+.dpanel{background:var(--card);border:1px solid var(--bd);border-radius:11px;overflow:hidden;display:flex;flex-direction:column}
+.dp-img{height:165px;overflow:hidden;flex-shrink:0}
+.dp-img img{width:100%;height:100%;object-fit:cover}
+.dp-body{padding:13px;flex:1;overflow-y:auto}
+.dp-name{font-family:var(--fh);font-size:1.05rem;font-weight:700;margin-bottom:3px}
+.dp-rar{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.dp-desc{font-size:.76rem;color:var(--dim);line-height:1.5;margin-bottom:10px}
+.dp-price{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--purpll);margin-bottom:10px}
+.dp-empty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--muted)}
+.dp-empty-icon{font-size:2rem}.dp-empty-text{font-size:.76rem;text-align:center;line-height:1.5}
+.btn-eq{background:var(--green);color:#fff;font-size:.76rem;font-weight:700;padding:9px;border-radius:8px;border:none;cursor:pointer;width:100%;text-transform:uppercase;letter-spacing:.04em;transition:background .18s;margin-bottom:6px}
+.btn-eq:hover{background:#059669}.btn-eq.uneq{background:var(--muted)}.btn-eq.uneq:hover{background:var(--dim)}
+.btn-store-l{background:var(--purple);color:#fff;font-size:.76rem;font-weight:700;padding:9px;border-radius:8px;border:none;cursor:pointer;width:100%;text-transform:uppercase;letter-spacing:.04em;transition:background .18s}
+.btn-store-l:hover{background:var(--purpll)}
+.rdm-sec{padding:12px;border-top:1px solid var(--bd)}
+.rdm-ttl{font-family:var(--fh);font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;color:var(--dim)}
+.rdm-row{display:flex;gap:5px;margin-bottom:5px}
+.rdm-inp{flex:1;background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:8px 10px;color:var(--text);font-size:.74rem;outline:none;transition:border-color .18s;font-family:var(--fb)}
+.rdm-inp:focus{border-color:var(--bd2)}.rdm-inp::placeholder{color:var(--muted)}
+.btn-rdm{background:var(--purple);color:#fff;font-size:.69rem;font-weight:700;padding:8px 10px;border-radius:7px;border:none;cursor:pointer;white-space:nowrap;transition:background .18s}
+.btn-rdm:hover{background:var(--purpll)}
+.rdm-msg{font-size:.7rem;display:none}.rdm-msg.ok{display:block;color:var(--green)}.rdm-msg.err{display:block;color:var(--red)}
+/* ── SETTINGS ────────────────────────────────────── */
+.sg{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:11px}
+.sg h3{font-family:var(--fh);font-size:.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:11px}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd)}
+.sr:last-child{border-bottom:none}
+.sl{font-size:.81rem;font-weight:500}.sd{font-size:.7rem;color:var(--dim);margin-top:2px}
+/* ── TOAST ───────────────────────────────────────── */
+#ltc{position:fixed;bottom:14px;right:14px;z-index:999;display:flex;flex-direction:column;gap:6px}
+.lt{background:var(--card2);border:1px solid var(--bd2);border-radius:8px;padding:9px 14px;font-size:.77rem;font-weight:500;box-shadow:0 6px 18px rgba(0,0,0,.4);animation:ti .2s ease,to .3s ease 2.7s forwards;max-width:260px}
+.lt.ok{border-color:rgba(16,185,129,.4);color:#10b981}.lt.err{border-color:rgba(239,68,68,.4);color:#ef4444}
+@keyframes ti{from{transform:translateX(50px);opacity:0}to{transform:none;opacity:1}}
+@keyframes to{to{opacity:0;transform:translateX(50px)}}
+</style>
+</head>
+<body>
+<div class="lbg"></div>
+
+<!-- TITLEBAR -->
+<div id="tb">
+  <div class="tb-logo">
+    <img src="../assets/icons/logo.svg" alt="">
+    AETHER CLIENT
+  </div>
+  <span class="tb-ver">v2.1.1</span>
+  <div class="wbtns">
+    <button class="wbtn" onclick="window.aether?.minimizeWindow()" title="Minimizar"><img src="../assets/icons/minimize.svg" alt="─"></button>
+    <button class="wbtn" id="wc" onclick="window.aether?.closeWindow()" title="Fechar"><img src="../assets/icons/close.svg" alt="✕"></button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <div id="sb">
+    <div id="sb-brand"><h1>AETHER</h1><p>CLIENT v2.1.1</p></div>
+    <div id="nav">
+      <div class="ni active" onclick="goto('home',this)">
+        <img src="../assets/icons/play.svg" alt="">Início
+      </div>
+      <div class="ni" onclick="goto('accounts',this)">
+        <img src="../assets/icons/profile.svg" alt="">Contas
+      </div>
+      <div class="ni" onclick="goto('cosmetics',this)">
+        <img src="../assets/icons/cosmetics.svg" alt="">Cosméticos
+      </div>
+      <div class="ni" onclick="goto('settings',this)">
+        <img src="../assets/icons/settings.svg" alt="">Configurações
+      </div>
+      <div class="ni" onclick="openStore()">
+        <img src="../assets/icons/store.svg" alt="">Loja
+      </div>
+    </div>
+    <div id="sb-foot">
+      <div id="srv"><div class="dot" id="srvDot"></div><span id="srvTxt">Verificando...</span></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- ═══ HOME ═══ -->
+    <div class="page active" id="page-home">
+      <!-- Account -->
+      <div class="acc-card">
+        <img class="head" id="headImg" src="https://crafatar.com/avatars/853c80ef3c3749fdaa49938b674adae6?size=52&overlay" alt="skin" onerror="this.src='https://crafatar.com/avatars/steve?size=52&overlay'">
+        <div style="flex:1;min-width:0">
+          <div class="acc-name" id="accName">Nenhuma conta</div>
+          <div class="badges">
+            <span class="bdg b-off" id="accType">OFFLINE</span>
+            <span class="bdg b-own" id="accRole" style="display:none"></span>
+          </div>
+        </div>
+        <button class="sbtn" onclick="goto('accounts',document.querySelector('.ni:nth-child(2)'))">Trocar</button>
+      </div>
+
+      <!-- Controls -->
+      <div class="lctrls">
+        <div class="lctrl">
+          <label>Versão</label>
+          <select id="selVer">
+            <option value="1.20.1">Aether Client 1.20.1 (Fabric)</option>
+            <option value="1.19.4">Aether Client 1.19.4 (Fabric)</option>
+            <option value="1.18.2">Aether Client 1.18.2 (Fabric)</option>
+            <option value="1.8.9" >Aether Client 1.8.9 (LF)</option>
+          </select>
+        </div>
+        <div class="lctrl">
+          <label>RAM Alocada</label>
+          <select id="selRam">
+            <option value="1G">1 GB</option>
+            <option value="2G" selected>2 GB</option>
+            <option value="4G">4 GB</option>
+            <option value="6G">6 GB</option>
+            <option value="8G">8 GB</option>
+          </select>
+        </div>
+      </div>
+      <div id="ram-info">Sistema: <b id="sysRam">detectando...</b> · Java: <b id="javaVer">verificando...</b></div>
+
+      <!-- Progress -->
+      <div id="prog-wrap">
+        <div id="prog-label">Preparando...</div>
+        <div id="prog-bar"><div id="prog-fill"></div></div>
+      </div>
+
+      <!-- Play -->
+      <button id="btn-play" onclick="doLaunch()">
+        <img src="../assets/icons/play.svg" alt=""> JOGAR
+      </button>
+
+      <!-- News -->
+      <div class="news-ttl">Notícias</div>
+      <div class="news-list">
+        <div class="news-item"><img src="../assets/news/news-1.svg" alt="Update" onerror="this.parentNode.style.display='none'"></div>
+        <div class="news-item"><img src="../assets/news/news-2.svg" alt="Evento" onerror="this.parentNode.style.display='none'"></div>
+        <div class="news-item"><img src="../assets/news/news-3.svg" alt="Loja" onerror="this.parentNode.style.display='none'"></div>
+      </div>
+    </div>
+
+    <!-- ═══ ACCOUNTS ═══ -->
+    <div class="page" id="page-accounts">
+      <div class="pg-title">Gerenciar Contas</div>
+      <div id="acc-list"></div>
+
+      <div style="font-family:var(--fh);font-size:.87rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:11px">Adicionar Conta</div>
+      <div class="add-tabs">
+        <button class="sbtn primary" onclick="switchTab('ms',this)">🔵 Microsoft</button>
+        <button class="sbtn"         onclick="switchTab('off',this)">⚪ Offline</button>
+      </div>
+
+      <div class="add-pane active" id="tab-ms">
+        <div class="add-panel">
+          <p style="font-size:.81rem;color:var(--dim)">Autentique com sua conta Microsoft para jogar original.</p>
+          <button class="btn-purp" onclick="startDeviceAuth()">Entrar com Microsoft (Device Code)</button>
+        </div>
+        <div id="dc-box">
+          <p style="font-size:.78rem;color:var(--dim)">Acesse o link e insira o código:</p>
+          <div id="dc-url"><a href="#" id="dcLink" target="_blank">microsoft.com/link</a></div>
+          <div id="dc-val">XXXX-XXXX</div>
+          <div id="dc-status">⏳ Aguardando...</div>
+        </div>
+      </div>
+
+      <div class="add-pane" id="tab-off">
+        <div class="add-panel">
+          <p style="font-size:.81rem;color:var(--dim)">Conta offline — sem autenticação.</p>
+          <input class="inp" id="offName" placeholder="Nome do jogador (3-16 chars)" maxlength="16">
+          <button class="btn-purp" onclick="addOffline()">Adicionar Conta Offline</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COSMETICS ═══ -->
+    <div class="page" id="page-cosmetics">
+      <div class="pg-title">Cosméticos <span style="font-size:.85rem;color:var(--dim);font-weight:400">(50 itens)</span></div>
+      <div class="cosm-toolbar">
+        <input class="csearch" id="csearch" type="search" placeholder="Buscar cosmético...">
+        <div class="ccats" id="ccatbar"></div>
+      </div>
+      <div class="cosm-body">
+        <div class="cosm-grid-l" id="cgridl"></div>
+        <div class="dpanel">
+          <div class="dp-empty" id="dpEmpty"><div class="dp-empty-icon">👈</div><div class="dp-empty-text">Clique em um<br>cosmético para<br>ver detalhes</div></div>
+          <div id="dpContent" style="display:none;flex-direction:column;flex:1">
+            <div class="dp-img"><img id="dpImg" src="" alt="" onerror="this.style.display='none';this.parentNode.style.background='linear-gradient(135deg,#0d0520,#1e0a40)'"></div>
+            <div class="dp-body">
+              <div class="dp-rar" id="dpRar"></div>
+              <div class="dp-name" id="dpName"></div>
+              <div class="dp-desc" id="dpDesc"></div>
+              <div class="dp-price" id="dpPrice"></div>
+              <button class="btn-eq" id="dpEq" onclick="toggleEq()">Equipar</button>
+              <button class="btn-store-l" onclick="openStore()">Comprar na Loja</button>
+            </div>
+            <div class="rdm-sec">
+              <div class="rdm-ttl">Resgatar Código</div>
+              <div class="rdm-row">
+                <input class="rdm-inp" id="rdmInp" placeholder="AE8X-4Q91-..." maxlength="20">
+                <button class="btn-rdm" onclick="doRdm()">OK</button>
+              </div>
+              <div class="rdm-msg" id="rdmMsg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS ═══ -->
+    <div class="page" id="page-settings">
+      <div class="pg-title">Configurações</div>
+      <div class="sg">
+        <h3>☕ Java</h3>
+        <div class="sr"><div><div class="sl">Java Detectado</div><div class="sd" id="javaInfo">Detectando...</div></div><button class="sbtn" onclick="detectJava()">Detectar</button></div>
+        <div class="sr"><div><div class="sl">RAM do Sistema</div><div class="sd" id="sysRamInfo">…</div></div></div>
+      </div>
+      <div class="sg">
+        <h3>🎮 Jogo</h3>
+        <div class="sr"><div><div class="sl">Menu de Mods</div><div class="sd">SHIFT Direito no jogo</div></div></div>
+        <div class="sr"><div><div class="sl">Overlay de Status</div><div class="sd">Tecla H no jogo</div></div></div>
+      </div>
+      <div class="sg">
+        <h3>ℹ Sobre</h3>
+        <div class="sr"><div class="sl">Versão</div><span style="font-size:.8rem;color:var(--dim)">2.1.1</span></div>
+        <div class="sr"><div class="sl">Backend</div><span style="font-family:monospace;font-size:.7rem;color:var(--dim)">aether-backend.onrender.com</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="ltc"></div>
+
+<script>
+'use strict';
+const BACKEND = 'https://aether-backend.onrender.com';
+const IMG_BASE = '../assets/cosmetics';
+
+// ── CATALOG (50 items) ─────────────────────────────────
+const CATALOG = [
+  {id:"aether_wings_001",   name:"Aether Wings",        cat:"wings",     rarity:"Mythic",    price:79.90,  desc:"Asas cósmicas do núcleo Aether."},
+  {id:"shadow_wings_002",   name:"Shadow Wings",        cat:"wings",     rarity:"Legendary", price:69.90,  desc:"Asas das sombras com neon roxo."},
+  {id:"solar_wings_003",    name:"Solar Flare Wings",   cat:"wings",     rarity:"Epic",      price:44.90,  desc:"Asas incandescentes do núcleo solar."},
+  {id:"frost_wings_004",    name:"Frost Wings",         cat:"wings",     rarity:"Elite",     price:29.90,  desc:"Asas de gelo eterno."},
+  {id:"storm_wings_005",    name:"Storm Wings",         cat:"wings",     rarity:"Legendary", price:64.90,  desc:"Asas da tempestade."},
+  {id:"void_wings_006",     name:"Void Wings",          cat:"wings",     rarity:"Mythic",    price:84.90,  desc:"Asas do vazio absoluto."},
+  {id:"crystal_wings_007",  name:"Crystal Wings",       cat:"wings",     rarity:"Premium",   price:14.90,  desc:"Asas de cristal."},
+  {id:"dragon_wings_008",   name:"Dragon Wings",        cat:"wings",     rarity:"Exclusive", price:149.90, desc:"Asas de dragão ancestral."},
+  {id:"angel_wings_009",    name:"Angel Wings",         cat:"wings",     rarity:"Celestial", price:99.90,  desc:"Asas angelicais com luz divina."},
+  {id:"neon_wings_010",     name:"Neon Wings",          cat:"wings",     rarity:"Epic",      price:39.90,  desc:"Asas de energia neon."},
+  {id:"void_cloak_011",     name:"Void Emperor Cloak",  cat:"cloaks",    rarity:"Exclusive", price:119.90, desc:"Capa do imperador do vazio."},
+  {id:"astral_cloak_012",   name:"Astral Cloak",        cat:"cloaks",    rarity:"Celestial", price:89.90,  desc:"Capa de matéria estelar."},
+  {id:"shadow_cloak_013",   name:"Shadow Cloak",        cat:"cloaks",    rarity:"Legendary", price:64.90,  desc:"Capa da sombra perfeita."},
+  {id:"frost_veil_014",     name:"Frost Veil",          cat:"cloaks",    rarity:"Epic",      price:34.90,  desc:"Capa glacial."},
+  {id:"crimson_cloak_015",  name:"Crimson Cloak",       cat:"cloaks",    rarity:"Elite",     price:24.90,  desc:"Capa carmesim."},
+  {id:"mystic_cloak_016",   name:"Mystic Cloak",        cat:"cloaks",    rarity:"Premium",   price:12.90,  desc:"Capa mística."},
+  {id:"night_cloak_017",    name:"Night Cloak",         cat:"cloaks",    rarity:"Standard",  price:4.90,   desc:"Capa da noite."},
+  {id:"phoenix_cloak_018",  name:"Phoenix Cloak",       cat:"cloaks",    rarity:"Mythic",    price:94.90,  desc:"Capa de fênix."},
+  {id:"neon_cap_019",       name:"Neon Hacker Cap",     cat:"hats",      rarity:"Epic",      price:19.90,  desc:"Boné neon roxo."},
+  {id:"urban_cap_020",      name:"Urban Cap",           cat:"hats",      rarity:"Standard",  price:4.90,   desc:"Boné urbano."},
+  {id:"royal_tophat_021",   name:"Royal Top Hat",       cat:"hats",      rarity:"Elite",     price:27.90,  desc:"Cartola real dourada."},
+  {id:"astral_beanie_022",  name:"Astral Beanie",       cat:"hats",      rarity:"Premium",   price:9.90,   desc:"Gorro astral."},
+  {id:"dragon_helm_023",    name:"Dragon Helm",         cat:"hats",      rarity:"Legendary", price:69.90,  desc:"Capacete de dragão."},
+  {id:"cyber_hood_024",     name:"Cyber Hood",          cat:"hats",      rarity:"Elite",     price:24.90,  desc:"Capuz cyberpunk."},
+  {id:"oni_mask_025",       name:"Oni Mask",            cat:"masks",     rarity:"Elite",     price:22.90,  desc:"Máscara de oni."},
+  {id:"phantom_mask_026",   name:"Phantom Mask",        cat:"masks",     rarity:"Legendary", price:59.90,  desc:"Máscara do fantasma."},
+  {id:"cyber_mask_027",     name:"Cyber Mask",          cat:"masks",     rarity:"Epic",      price:34.90,  desc:"Máscara cyber."},
+  {id:"death_mask_028",     name:"Death Mask",          cat:"masks",     rarity:"Mythic",    price:89.90,  desc:"Máscara da morte."},
+  {id:"fox_mask_029",       name:"Fox Mask",            cat:"masks",     rarity:"Premium",   price:14.90,  desc:"Máscara de raposa."},
+  {id:"dragon_mask_030",    name:"Dragon Mask",         cat:"masks",     rarity:"Exclusive", price:129.90, desc:"Máscara de dragão."},
+  {id:"astral_band_031",    name:"Astral Bandana",      cat:"bandanas",  rarity:"Celestial", price:44.90,  desc:"Bandana celestial."},
+  {id:"neon_band_032",      name:"Neon Bandana",        cat:"bandanas",  rarity:"Premium",   price:9.90,   desc:"Bandana neon."},
+  {id:"void_band_033",      name:"Void Bandana",        cat:"bandanas",  rarity:"Legendary", price:54.90,  desc:"Bandana do vazio."},
+  {id:"flame_band_034",     name:"Flame Bandana",       cat:"bandanas",  rarity:"Elite",     price:19.90,  desc:"Bandana com chamas."},
+  {id:"shadow_band_035",    name:"Shadow Bandana",      cat:"bandanas",  rarity:"Epic",      price:29.90,  desc:"Bandana das sombras."},
+  {id:"divine_aura_036",    name:"Divine Halo Aura",    cat:"auras",     rarity:"Celestial", price:64.90,  desc:"Aura com halo divino."},
+  {id:"astral_aura_037",    name:"Astral Aura",         cat:"auras",     rarity:"Celestial", price:54.90,  desc:"Aura astral."},
+  {id:"plasma_aura_038",    name:"Plasma Aura",         cat:"auras",     rarity:"Epic",      price:39.90,  desc:"Aura de plasma."},
+  {id:"void_aura_039",      name:"Void Aura",           cat:"auras",     rarity:"Mythic",    price:84.90,  desc:"Aura do vazio."},
+  {id:"flame_aura_040",     name:"Flame Aura",          cat:"auras",     rarity:"Legendary", price:59.90,  desc:"Aura de chamas."},
+  {id:"void_suit_041",      name:"Void Emperor Suit",   cat:"suits",     rarity:"Exclusive", price:159.90, desc:"Armadura do vazio."},
+  {id:"cyber_suit_042",     name:"Cyber Suit",          cat:"suits",     rarity:"Legendary", price:74.90,  desc:"Armadura cyber."},
+  {id:"astral_suit_043",    name:"Astral Suit",         cat:"suits",     rarity:"Mythic",    price:99.90,  desc:"Armadura astral."},
+  {id:"shadow_suit_044",    name:"Shadow Suit",         cat:"suits",     rarity:"Epic",      price:44.90,  desc:"Armadura das sombras."},
+  {id:"royal_crown_045",    name:"Royal Crown",         cat:"crowns",    rarity:"Legendary", price:69.90,  desc:"Coroa real dourada."},
+  {id:"void_crown_046",     name:"Void Crown",          cat:"crowns",    rarity:"Mythic",    price:94.90,  desc:"Coroa do vazio."},
+  {id:"diamond_crown_047",  name:"Diamond Crown",       cat:"crowns",    rarity:"Celestial", price:109.90, desc:"Coroa de diamante."},
+  {id:"gold_chain_048",     name:"Gold Chain",          cat:"necklaces", rarity:"Premium",   price:12.90,  desc:"Corrente dourada."},
+  {id:"aether_chain_049",   name:"Aether Chain",        cat:"necklaces", rarity:"Legendary", price:59.90,  desc:"Corrente Aether."},
+  {id:"dragon_chain_050",   name:"Dragon Chain",        cat:"necklaces", rarity:"Elite",     price:22.90,  desc:"Corrente de dragão."},
+];
+
+const RAR_COLS = {Mythic:'#ef4444',Legendary:'#f59e0b',Epic:'#a855f7',Elite:'#3b82f6',Celestial:'#22d3ee',Premium:'#10b981',Standard:'#9ca3af',Exclusive:'#fbbf24'};
+const LCAT_LABELS = {all:'Todos',wings:'Asas',cloaks:'Capas',hats:'Bonés',masks:'Máscaras',bandanas:'Bandanas',auras:'Auras',suits:'Armaduras',crowns:'Coroas',necklaces:'Correntes'};
+const LCATS = ['all','wings','cloaks','hats','masks','bandanas','auras','suits','crowns','necklaces'];
+
+let st = { accounts:[], active:null, config:{ram:'2G',version:'1.20.1'}, launching:false, pollInterval:null };
+let lcat='all', lsel=null;
+let equipped = new Set(JSON.parse(localStorage.getItem('ac_eq')||'[]'));
+
+// ── Init ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  buildCcats();
+  renderCgrid();
+  await loadState();
+  setupListeners();
+  checkServer();
+  detectJavaInfo();
+  ['selVer','selRam'].forEach(id => {
+    document.getElementById(id).addEventListener('change', saveCfg);
+  });
+  document.getElementById('csearch').addEventListener('input', renderCgrid);
+});
+
+async function loadState() {
+  if (!window.aether) return;
+  const [accs, cfg] = await Promise.all([aether.loadAccounts(), aether.loadConfig()]);
+  st.accounts = accs||[];
+  st.config   = {...st.config,...(cfg||{})};
+  if (st.accounts.length) {
+    const last = st.config.lastUser;
+    st.active  = st.accounts.find(a=>a.uuid===last)||st.accounts[0];
+  }
+  applyConfig();
+  renderAccList();
+  renderActiveAcc();
+}
+
+// ── NAV ─────────────────────────────────────────────────
+function goto(id, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ── ACTIVE ACC ───────────────────────────────────────────
+function renderActiveAcc() {
+  const acc = st.active;
+  if (!acc) return;
+  document.getElementById('accName').textContent = acc.username;
+  const tb = document.getElementById('accType');
+  tb.textContent = acc.type==='microsoft'?'MICROSOFT':'OFFLINE';
+  tb.className   = `bdg ${acc.type==='microsoft'?'b-ms':'b-off'}`;
+  const rb = document.getElementById('accRole');
+  if (acc.role && acc.role!=='MEMBER') { rb.style.display=''; rb.textContent=acc.role; }
+  else rb.style.display='none';
+  if (acc.uuid) {
+    const img = document.getElementById('headImg');
+    img.src = `https://crafatar.com/avatars/${acc.uuid}?size=52&overlay`;
+    img.onerror = () => { img.src='https://crafatar.com/avatars/steve?size=52&overlay'; };
+  }
+}
+
+// ── ACCOUNTS LIST ────────────────────────────────────────
+function renderAccList() {
+  const el = document.getElementById('acc-list');
+  if (!st.accounts.length) { el.innerHTML='<div style="font-size:.81rem;color:var(--muted);padding:10px">Nenhuma conta adicionada.</div>'; return; }
+  el.innerHTML = st.accounts.map(acc=>`
+    <div class="ar">
+      <img src="https://crafatar.com/avatars/${acc.uuid||'steve'}?size=38&overlay" alt="" onerror="this.src='https://crafatar.com/avatars/steve?size=38&overlay'">
+      <div style="flex:1;min-width:0">
+        <div class="arn">${acc.username}</div>
+        <div class="ars"><span class="bdg ${acc.type==='microsoft'?'b-ms':'b-off'}">${acc.type==='microsoft'?'MS':'OFFLINE'}</span></div>
+      </div>
+      <button class="sbtn ${st.active?.uuid===acc.uuid?'sel':''}" onclick="selAcc('${acc.uuid}')">${st.active?.uuid===acc.uuid?'✓ Ativo':'Selecionar'}</button>
+      <button class="sbtn del" onclick="rmAcc('${acc.uuid}')">✕</button>
+    </div>`).join('');
+}
+
+async function selAcc(uuid) {
+  st.active = st.accounts.find(a=>a.uuid===uuid);
+  st.config.lastUser = uuid;
+  if(window.aether) aether.saveConfig(st.config);
+  renderAccList(); renderActiveAcc();
+  lToast('✓ '+st.active.username);
+}
+
+async function rmAcc(uuid) {
+  if(!window.aether) return;
+  st.accounts = await aether.removeAccount(uuid);
+  if(st.active?.uuid===uuid){st.active=st.accounts[0]||null;renderActiveAcc();}
+  renderAccList();
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.add-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.add-tabs .sbtn').forEach(b=>b.classList.remove('primary'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('primary');
+}
+
+async function addOffline() {
+  const name = document.getElementById('offName').value.trim();
+  if(!name||name.length<3) return lToast('Nome inválido','err');
+  if(!window.aether) return lToast('Launcher necessário','err');
+  const res = await aether.addOfflineAccount(name);
+  if(res.error) return lToast(res.error,'err');
+  st.accounts=res.accounts; st.active=res.account;
+  renderAccList(); renderActiveAcc();
+  document.getElementById('offName').value='';
+  lToast('✓ Conta: '+name);
+}
+
+// ── MICROSOFT AUTH ───────────────────────────────────────
+async function startDeviceAuth() {
+  const box=document.getElementById('dc-box'); box.style.display='block';
+  document.getElementById('dc-val').textContent='...';
+  document.getElementById('dc-status').textContent='⏳ Solicitando...';
+  if(!window.aether) { lToast('Launcher necessário','err'); box.style.display='none'; return; }
+  const data = await aether.msDeviceStart();
+  if(data.error) { lToast('Erro: '+data.error,'err'); box.style.display='none'; return; }
+  document.getElementById('dc-val').textContent=data.user_code||'ERRO';
+  document.getElementById('dc-status').textContent='⏳ Aguardando confirmação...';
+  const lnk=document.getElementById('dcLink');
+  lnk.href=data.verification_uri||'https://microsoft.com/link';
+  lnk.textContent=data.verification_uri||'microsoft.com/link';
+  if(st.pollInterval) clearInterval(st.pollInterval);
+  st.pollInterval = setInterval(async()=>{
+    const res=await aether.msDevicePoll(data.device_code);
+    if(res.status==='authorized'){
+      clearInterval(st.pollInterval); box.style.display='none';
+      const acc={uuid:res.uuid,username:res.username,type:'microsoft',accessToken:res.access_token||'',role:res.role||'MEMBER',addedAt:Date.now()};
+      st.accounts=await aether.addAccount(acc); st.active=acc;
+      renderAccList(); renderActiveAcc();
+      lToast('✓ Login: '+res.username);
+    } else if(res.status==='expired'||res.status==='declined'){
+      clearInterval(st.pollInterval); box.style.display='none'; lToast('Auth cancelada','err');
+    }
+  }, (data.interval||5)*1000);
+}
+
+// ── LAUNCH ───────────────────────────────────────────────
+async function doLaunch() {
+  if(st.launching) return;
+  if(!st.active) { lToast('Adicione uma conta!','err'); goto('accounts',document.querySelector('.ni:nth-child(2)')); return; }
+  if(!window.aether) { lToast('Launcher Electron necessário','err'); return; }
+  st.launching=true;
+  const btn=document.getElementById('btn-play');
+  btn.disabled=true; btn.innerHTML='⏳ INICIANDO...';
+  document.getElementById('prog-wrap').style.display='block';
+  const res=await aether.launch(st.active,{version:document.getElementById('selVer').value,ram:document.getElementById('selRam').value});
+  if(res?.error){st.launching=false;resetBtn();document.getElementById('prog-wrap').style.display='none';lToast('❌ '+res.error,'err');}
+}
+
+function resetBtn(){const b=document.getElementById('btn-play');b.disabled=false;b.innerHTML='<img src="../assets/icons/play.svg" alt="" style="width:18px;height:18px;filter:brightness(2)"> JOGAR'}
+
+function setupListeners() {
+  if(!window.aether) return;
+  aether.on('launch-progress',({step,percent})=>{document.getElementById('prog-label').textContent=step;document.getElementById('prog-fill').style.width=percent+'%'});
+  aether.on('game-closed',()=>{st.launching=false;resetBtn();document.getElementById('prog-wrap').style.display='none';lToast('Minecraft encerrado')});
+  aether.on('launch-error',({error})=>{st.launching=false;resetBtn();document.getElementById('prog-wrap').style.display='none';lToast('❌ '+error,'err')});
+}
+
+function applyConfig(){const{ram,version}=st.config;[...document.getElementById('selVer').options].forEach(o=>{if(o.value===version)o.selected=true});[...document.getElementById('selRam').options].forEach(o=>{if(o.value===ram)o.selected=true})}
+function saveCfg(){st.config.version=document.getElementById('selVer').value;st.config.ram=document.getElementById('selRam').value;window.aether?.saveConfig(st.config)}
+
+// ── JAVA / RAM ───────────────────────────────────────────
+async function detectJavaInfo() {
+  if(!window.aether) return;
+  const j=await aether.checkJava();
+  const gb=j.systemRAM?(j.systemRAM/1024).toFixed(1):'?';
+  document.getElementById('sysRam').textContent=`${gb} GB RAM`;
+  document.getElementById('javaVer').textContent=j.path?`Java ${j.version}`:j.error||'Não encontrado';
+  document.getElementById('sysRamInfo').textContent=j.systemRAM?`${j.systemRAM}MB (${gb}GB)`:'?';
+  document.getElementById('javaInfo').textContent=j.path?`${j.path} — Java ${j.version}`:j.error||'Não encontrado';
+}
+function detectJava(){detectJavaInfo().then(()=>lToast('Java verificado!'))}
+
+// ── COSMETICS ────────────────────────────────────────────
+function buildCcats(){
+  document.getElementById('ccatbar').innerHTML=LCATS.map(c=>`<button class="ccat ${c==='all'?'active':''}" onclick="setLcat('${c}',this)">${LCAT_LABELS[c]||c}</button>`).join('');
+}
+function setLcat(cat,btn){lcat=cat;document.querySelectorAll('.ccat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderCgrid()}
+
+function renderCgrid(){
+  const q=(document.getElementById('csearch')?.value||'').toLowerCase();
+  let items=[...CATALOG];
+  if(lcat!=='all') items=items.filter(i=>i.cat===lcat);
+  if(q) items=items.filter(i=>i.name.toLowerCase().includes(q)||i.rarity.toLowerCase().includes(q));
+  const grid=document.getElementById('cgridl');
+  grid.innerHTML=items.map(item=>{
+    const rLow=item.rarity.toLowerCase();
+    const isEq=equipped.has(item.id);
+    const isSel=lsel===item.id;
+    return `<div class="lc ${isEq?'eq':''} ${isSel?'sel':''}" onclick="selCosm('${item.id}')">
+      <div class="lc-img"><img src="${IMG_BASE}/${item.id}.svg" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.parentNode.style.background='linear-gradient(135deg,#0d0520,#1e0a40)'"></div>
+      <div class="lc-strip ls-${rLow}"></div>
+      <div class="lc-info"><div class="lc-name">${item.name}${isEq?'<span class="eq-badge">✓</span>':''}</div><div class="lc-sub">${LCAT_LABELS[item.cat]||item.cat}</div><div class="lc-price">R$${item.price.toFixed(2).replace('.',',')}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function selCosm(id){
+  lsel=id;
+  const item=CATALOG.find(i=>i.id===id);
+  renderCgrid();
+  if(!item) return;
+  const color=RAR_COLS[item.rarity]||'#a855f7';
+  const isEq=equipped.has(id);
+  document.getElementById('dpEmpty').style.display='none';
+  const dc=document.getElementById('dpContent'); dc.style.display='flex';
+  const dpi=document.getElementById('dpImg'); dpi.src=`${IMG_BASE}/${item.id}.svg`; dpi.style.display='';
+  document.getElementById('dpRar').textContent=item.rarity; document.getElementById('dpRar').style.color=color;
+  document.getElementById('dpName').textContent=item.name;
+  document.getElementById('dpDesc').textContent=item.desc;
+  document.getElementById('dpPrice').textContent=`R$ ${item.price.toFixed(2).replace('.',',')}`;
+  document.getElementById('dpPrice').style.color=color;
+  const eqBtn=document.getElementById('dpEq');
+  eqBtn.textContent=isEq?'✓ Equipado — Remover':'⚡ Equipar'; eqBtn.dataset.id=id;
+  eqBtn.className=`btn-eq${isEq?' uneq':''}`;
+}
+
+function toggleEq(){
+  const id=document.getElementById('dpEq').dataset.id; if(!id) return;
+  if(equipped.has(id)){equipped.delete(id);lToast('Removido')}
+  else{equipped.add(id);lToast('✓ Equipado!')}
+  localStorage.setItem('ac_eq',JSON.stringify([...equipped]));
+  selCosm(id); renderCgrid();
+}
+
+// ── REDEEM ───────────────────────────────────────────────
+async function doRdm(){
+  const code=document.getElementById('rdmInp').value.trim().toUpperCase();
+  const msg=document.getElementById('rdmMsg');
+  if(!code||code.length<8){msg.className='rdm-msg err';msg.textContent='Código inválido.';return}
+  try{
+    const r=await fetch(`${BACKEND}/store/redeem`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,userId:st.active?.uuid||'anonymous'})});
+    const d=await r.json();
+    if(d.success){msg.className='rdm-msg ok';msg.textContent=`✅ ${d.item||'Item'} resgatado!`;lToast('✅ Resgatado!')}
+    else{msg.className='rdm-msg err';msg.textContent=d.message||'❌ Código inválido.'}
+  }catch{msg.className='rdm-msg err';msg.textContent='❌ Erro de conexão.'}
+}
+
+// ── STORE ────────────────────────────────────────────────
+function openStore(){if(window.aether?.openStore)aether.openStore();else window.open('../../store/index.html','_blank')}
+
+// ── SERVER ───────────────────────────────────────────────
+async function checkServer(){
+  const dot=document.getElementById('srvDot'),txt=document.getElementById('srvTxt');
+  try{const r=await fetch(`${BACKEND}/status`,{signal:AbortSignal.timeout(5000)});const d=await r.json();
+    if(d.status==='online'){dot.classList.remove('off');txt.textContent='Online'}
+    else{dot.classList.add('off');txt.textContent='Offline'}
+  }catch{dot.classList.add('off');txt.textContent='Offline'}
+  setTimeout(checkServer,30000);
+}
+
+// ── TOAST ────────────────────────────────────────────────
+function lToast(msg,type='ok'){const tc=document.getElementById('ltc');const t=document.createElement('div');t.className=`lt ${type}`;t.textContent=msg;tc.appendChild(t);setTimeout(()=>t.remove(),3000)}
+</script>
+</body>
+</html>

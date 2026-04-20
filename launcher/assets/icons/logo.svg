@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<defs><filter id="g"><feGaussianBlur stdDeviation="1.5"/></filter></defs>
+<defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient></defs><polygon points="16,2 30,28 2,28" fill="url(#lg)" opacity="0.92"/><polygon points="16,11 23,26 9,26" fill="#03020e"/>
+</svg>

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "aethervex",
+  "version": "${version}",
+  "name": "AetherVex Client",
+  "description": "AetherVex - Premium Minecraft Client Mod",
+  "authors": [ "AetherVex Team" ],
+  "contact": {
+    "homepage": "https://aethervex.github.io",
+    "sources":  "https://github.com/AetherVexClient/aethervex-mod"
+  },
+  "license": "All Rights Reserved",
+  "icon":    "assets/aethervex/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [ "com.aethervex.client.AetherVexClient" ]
+  },
+  "mixins": [ "aethervex.mixins.json" ],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "minecraft":    "1.8.9"
+  }
+}

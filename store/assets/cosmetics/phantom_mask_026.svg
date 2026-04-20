@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <radialGradient id="bgMain" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0d0d28"/>
+      <stop offset="100%" stop-color="#020208"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#bgMain)"/>
+  <g opacity="0.5">
+    <circle cx="115.5" cy="269.5" r="1.8" fill="white" opacity="0.43"/>
+    <circle cx="254.1" cy="188.2" r="0.6" fill="white" opacity="0.87"/>
+    <circle cx="81.6" cy="95.7" r="1.1" fill="white" opacity="0.65"/>
+    <circle cx="44.8" cy="202.3" r="1.7" fill="white" opacity="0.61"/>
+    <circle cx="232.4" cy="185.0" r="1.7" fill="white" opacity="0.41"/>
+    <circle cx="110.4" cy="141.4" r="0.7" fill="white" opacity="0.88"/>
+    <circle cx="188.1" cy="37.5" r="1.4" fill="white" opacity="0.55"/>
+    <circle cx="63.0" cy="55.1" r="1.2" fill="white" opacity="0.34"/>
+    <circle cx="167.7" cy="154.2" r="0.7" fill="white" opacity="0.83"/>
+    <circle cx="21.3" cy="58.2" r="1.7" fill="white" opacity="0.43"/>
+    <circle cx="128.8" cy="166.7" r="1.2" fill="white" opacity="0.60"/>
+    <circle cx="151.3" cy="145.2" r="0.6" fill="white" opacity="0.79"/>
+    <circle cx="89.2" cy="23.4" r="1.1" fill="white" opacity="0.79"/>
+    <circle cx="186.1" cy="138.0" r="1.2" fill="white" opacity="0.43"/>
+    <circle cx="183.1" cy="108.1" r="0.6" fill="white" opacity="0.38"/>
+    <circle cx="35.9" cy="201.7" r="1.8" fill="white" opacity="0.75"/>
+    <circle cx="71.5" cy="51.2" r="1.9" fill="white" opacity="0.52"/>
+    <circle cx="56.8" cy="170.0" r="1.4" fill="white" opacity="0.62"/>
+    <circle cx="136.5" cy="95.1" r="1.2" fill="white" opacity="0.57"/>
+    <circle cx="200.8" cy="135.5" r="1.0" fill="white" opacity="0.89"/>
+    <circle cx="41.0" cy="221.6" r="1.1" fill="white" opacity="0.78"/>
+    <circle cx="208.3" cy="168.5" r="1.4" fill="white" opacity="0.44"/>
+    <circle cx="14.5" cy="219.0" r="0.9" fill="white" opacity="0.37"/>
+    <circle cx="237.2" cy="175.5" r="0.5" fill="white" opacity="0.61"/>
+    <circle cx="55.8" cy="252.3" r="0.9" fill="white" opacity="0.86"/>
+    <circle cx="181.5" cy="31.9" r="1.1" fill="white" opacity="0.88"/>
+    <circle cx="206.3" cy="53.4" r="1.1" fill="white" opacity="0.46"/>
+    <circle cx="36.2" cy="176.2" r="1.5" fill="white" opacity="0.43"/>
+    <circle cx="164.5" cy="251.1" r="1.8" fill="white" opacity="0.40"/>
+    <circle cx="31.0" cy="265.5" r="1.0" fill="white" opacity="0.40"/>
+    <circle cx="233.7" cy="84.0" r="1.6" fill="white" opacity="0.71"/>
+    <circle cx="91.9" cy="139.1" r="0.9" fill="white" opacity="0.78"/>
+    <circle cx="89.5" cy="86.7" r="1.8" fill="white" opacity="0.47"/>
+    <circle cx="132.2" cy="154.5" r="0.5" fill="white" opacity="0.47"/>
+    <circle cx="218.2" cy="284.7" r="1.0" fill="white" opacity="0.59"/>
+  </g>
+  <defs>
+    <radialGradient id="mg1" cx="150" cy="145" r="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#050510"/>
+    </radialGradient>
+    <radialGradient id="mglow" cx="150" cy="145" r="65" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="rgba(168,85,247,0.65)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="mf" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2.5 0" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <ellipse cx="150" cy="145" rx="65" ry="55" fill="url(#mglow)" opacity="0.3"/>
+  <g fill="#1a1a2e" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1">
+    <rect x="138.0" y="152.0" width="24.0" height="24.0"/>
+    <rect x="138.0" y="176.0" width="24.0" height="32.0"/>
+    <rect x="130.0" y="176.0" width="8.0" height="28.0"/>
+    <rect x="162.0" y="176.0" width="8.0" height="28.0"/>
+    <rect x="138.0" y="208.0" width="11.0" height="28.0"/>
+    <rect x="151.0" y="208.0" width="11.0" height="28.0"/>
+  </g>
+  <path d="M 115 140 Q 115 180 150 185 Q 185 180 185 140 Z" fill="url(#mg1)" filter="url(#mf)"/>
+  <ellipse cx="135" cy="127" rx="9" ry="10" fill="#a855f7" opacity="0.9" filter="url(#mf)"/>
+  <ellipse cx="165" cy="127" rx="9" ry="10" fill="#a855f7" opacity="0.9" filter="url(#mf)"/>
+  <rect x="0" y="265" width="300" height="35" fill="#050510" opacity="0.85"/>
+  <text x="150" y="281" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#f59e0b">Phantom Mask</text>
+  <text x="150" y="294" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#f59e0b">LEGENDARY</text>
+  <rect x="1" y="1" width="298" height="298" rx="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+</svg>

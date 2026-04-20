@@ -1,0 +1,27 @@
+# Node
+node_modules/
+dist/
+.npm/
+
+# Launcher build output
+launcher/dist/
+launcher/node_modules/
+
+# Backend
+backend/data/*.db
+backend/.env
+backend/node_modules/
+
+# Mod build
+mod/.gradle/
+mod/build/
+mod/.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
+*.keystore

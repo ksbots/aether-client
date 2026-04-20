@@ -1,0 +1,49 @@
+{
+  "name": "aethervex-launcher",
+  "version": "2.1.1",
+  "description": "AetherVex Client Launcher",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --publish never",
+    "build:linux": "electron-builder --linux --publish never",
+    "build:mac": "electron-builder --mac --publish never"
+  },
+  "dependencies": {
+    "minecraft-launcher-core": "^3.17.5",
+    "msmc": "^5.0.5",
+    "node-fetch": "^2.7.0",
+    "adm-zip": "^0.5.10",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.aethervex.launcher",
+    "productName": "AetherVex",
+    "copyright": "AetherVex Team",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AetherVex"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "mac": {
+      "target": "dmg"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+---
+# _config.yml — GitHub Pages configuration
+title: AetherVex Client
+description: Premium Minecraft Client — Cosméticos, Launcher e Mods
+baseurl: ""
+url: "https://aethervexclient.github.io"
+
+# Exclude dev files from build
+exclude:
+  - backend/
+  - mod/
+  - launcher/node_modules/
+  - launcher/dist/
+  - "*.sh"
+  - ".env*"

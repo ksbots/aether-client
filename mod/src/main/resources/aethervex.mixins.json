@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.aethervex.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinMinecraft",
+    "MixinEntityRenderer",
+    "MixinNetworkManager",
+    "MixinAbstractClientPlayer",
+    "MixinGameSettings"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
