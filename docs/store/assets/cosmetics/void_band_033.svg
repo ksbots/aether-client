@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <radialGradient id="bgMain" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0d0d28"/>
+      <stop offset="100%" stop-color="#020208"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#bgMain)"/>
+  <g opacity="0.5">
+    <circle cx="31.7" cy="69.8" r="1.0" fill="white" opacity="0.84"/>
+    <circle cx="149.0" cy="211.7" r="0.7" fill="white" opacity="0.61"/>
+    <circle cx="246.1" cy="156.4" r="1.9" fill="white" opacity="0.83"/>
+    <circle cx="113.9" cy="10.2" r="1.6" fill="white" opacity="0.38"/>
+    <circle cx="12.6" cy="214.6" r="1.8" fill="white" opacity="0.80"/>
+    <circle cx="277.0" cy="66.5" r="0.6" fill="white" opacity="0.37"/>
+    <circle cx="283.8" cy="41.3" r="0.7" fill="white" opacity="0.31"/>
+    <circle cx="23.8" cy="20.7" r="1.0" fill="white" opacity="0.40"/>
+    <circle cx="96.7" cy="270.1" r="0.8" fill="white" opacity="0.79"/>
+    <circle cx="216.7" cy="169.2" r="1.4" fill="white" opacity="0.76"/>
+    <circle cx="174.4" cy="74.2" r="1.0" fill="white" opacity="0.45"/>
+    <circle cx="122.2" cy="286.4" r="1.1" fill="white" opacity="0.34"/>
+    <circle cx="143.5" cy="237.6" r="1.2" fill="white" opacity="0.72"/>
+    <circle cx="35.5" cy="27.5" r="1.5" fill="white" opacity="0.33"/>
+    <circle cx="94.6" cy="117.7" r="0.8" fill="white" opacity="0.32"/>
+    <circle cx="11.9" cy="276.5" r="1.5" fill="white" opacity="0.87"/>
+    <circle cx="147.7" cy="277.2" r="1.8" fill="white" opacity="0.67"/>
+    <circle cx="157.0" cy="152.4" r="0.8" fill="white" opacity="0.53"/>
+    <circle cx="212.4" cy="64.7" r="1.8" fill="white" opacity="0.61"/>
+    <circle cx="179.2" cy="240.1" r="1.5" fill="white" opacity="0.38"/>
+    <circle cx="79.4" cy="10.3" r="0.5" fill="white" opacity="0.87"/>
+    <circle cx="176.0" cy="281.3" r="1.7" fill="white" opacity="0.49"/>
+    <circle cx="280.8" cy="268.3" r="1.2" fill="white" opacity="0.35"/>
+    <circle cx="99.2" cy="56.6" r="1.0" fill="white" opacity="0.35"/>
+    <circle cx="209.7" cy="284.3" r="0.8" fill="white" opacity="0.77"/>
+    <circle cx="173.6" cy="145.1" r="1.9" fill="white" opacity="0.53"/>
+    <circle cx="239.9" cy="19.7" r="1.9" fill="white" opacity="0.41"/>
+    <circle cx="11.0" cy="256.8" r="1.6" fill="white" opacity="0.70"/>
+    <circle cx="224.5" cy="115.7" r="0.7" fill="white" opacity="0.49"/>
+    <circle cx="277.0" cy="284.8" r="0.8" fill="white" opacity="0.57"/>
+    <circle cx="136.2" cy="263.2" r="0.5" fill="white" opacity="0.80"/>
+    <circle cx="81.0" cy="163.8" r="0.7" fill="white" opacity="0.35"/>
+    <circle cx="257.3" cy="150.8" r="2.0" fill="white" opacity="0.82"/>
+    <circle cx="220.7" cy="30.9" r="1.4" fill="white" opacity="0.90"/>
+    <circle cx="150.8" cy="28.5" r="0.8" fill="white" opacity="0.89"/>
+  </g>
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a0a1a" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#1a0a3e" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="1"/>
+    </linearGradient>
+    <radialGradient id="bglow" cx="150" cy="130" r="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="rgba(124,58,237,0.65)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="bf" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2 0" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="150" cy="160" r="50" fill="url(#bglow)" opacity="0.3"/>
+  <g fill="#1a1a2e" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1">
+    <rect x="138.0" y="147.0" width="24.0" height="24.0"/>
+    <rect x="138.0" y="171.0" width="24.0" height="32.0"/>
+    <rect x="130.0" y="171.0" width="8.0" height="28.0"/>
+    <rect x="162.0" y="171.0" width="8.0" height="28.0"/>
+    <rect x="138.0" y="203.0" width="11.0" height="28.0"/>
+    <rect x="151.0" y="203.0" width="11.0" height="28.0"/>
+  </g>
+  <rect x="116" y="125" width="68" height="28" rx="6" fill="url(#bg1)" filter="url(#bf)"/>
+  <line x1="122" y1="129" x2="122" y2="149" stroke="#7c3aed" stroke-width="2" opacity="0.5"/>
+  <line x1="136" y1="129" x2="136" y2="149" stroke="#7c3aed" stroke-width="2" opacity="0.5"/>
+  <line x1="150" y1="129" x2="150" y2="149" stroke="#7c3aed" stroke-width="2" opacity="0.5"/>
+  <line x1="164" y1="129" x2="164" y2="149" stroke="#7c3aed" stroke-width="2" opacity="0.5"/>
+  <line x1="178" y1="129" x2="178" y2="149" stroke="#7c3aed" stroke-width="2" opacity="0.5"/>
+  <circle cx="192" cy="139" r="8" fill="#1a0a3e" filter="url(#bf)"/>
+  <line x1="192" y1="139" x2="206" y2="131" stroke="#1a0a3e" stroke-width="2" opacity="0.7"/>
+  <line x1="192" y1="139" x2="206" y2="147" stroke="#1a0a3e" stroke-width="2" opacity="0.7"/>
+  <rect x="0" y="265" width="300" height="35" fill="#050510" opacity="0.85"/>
+  <text x="150" y="281" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#f59e0b">Void Bandana</text>
+  <text x="150" y="294" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#f59e0b">LEGENDARY</text>
+  <rect x="1" y="1" width="298" height="298" rx="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+</svg>

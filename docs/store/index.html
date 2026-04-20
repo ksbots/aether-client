@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Loja AetherVex — 50 cosméticos premium para Minecraft. Asas, capas, auras, máscaras e muito mais.">
+<title>Loja — AetherVex Client</title>
+<link rel="icon" href="../site/assets/icons/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../site/css/shared.css">
+<style>
+.store-hero {
+  min-height: 280px; display: flex; align-items: center;
+  padding: clamp(40px,5vw,72px) clamp(20px,5vw,80px);
+  position: relative; overflow: hidden;
+}
+.store-hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(109,40,217,.28) 0%, transparent 65%),
+    radial-gradient(ellipse 30% 40% at 10% 80%, rgba(34,211,238,.08) 0%, transparent 55%),
+    var(--bg);
+}
+.store-hero-content { position: relative; z-index: 1; }
+
+/* Modal overlay */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--card2); border: 1px solid var(--bd2);
+  border-radius: 20px; padding: 32px; max-width: 440px; width: 100%;
+  position: relative; animation: modalIn .2s ease;
+}
+@keyframes modalIn { from{transform:scale(.93);opacity:0} to{transform:none;opacity:1} }
+.modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; color: var(--dim);
+  font-size: 1.2rem; cursor: pointer; transition: color .15s;
+}
+.modal-close:hover { color: var(--text); }
+.modal-img {
+  width: 100%; height: 200px; object-fit: contain;
+  background: linear-gradient(135deg,#0d0520,#1e0a40);
+  border-radius: var(--r12); margin-bottom: 20px;
+}
+.modal-rar { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.modal-name { font-family: var(--fh); font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+.modal-desc { color: var(--dim); font-size: .88rem; line-height: 1.6; margin-bottom: 18px; }
+.modal-price { font-family: var(--fh); font-size: 1.8rem; font-weight: 700; color: var(--purpll); margin-bottom: 18px; }
+.rdm-form { display: flex; flex-direction: column; gap: 10px; }
+.rdm-label { font-size: .78rem; color: var(--dim); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.rdm-inp-row { display: flex; gap: 8px; }
+.rdm-inp {
+  flex: 1; background: var(--panel); border: 1px solid var(--bd);
+  border-radius: var(--r8); padding: 10px 14px; color: var(--text);
+  font-size: .88rem; outline: none; transition: border-color .18s;
+  font-family: var(--fb); text-transform: uppercase; letter-spacing: .05em;
+}
+.rdm-inp:focus { border-color: var(--bd2); }
+.rdm-inp::placeholder { color: var(--muted); text-transform: none; letter-spacing: 0; }
+.rdm-submit {
+  padding: 10px 18px; background: var(--purple); color: #fff;
+  font-family: var(--fh); font-weight: 700; font-size: .85rem;
+  border: none; border-radius: var(--r8); cursor: pointer; transition: background .18s;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.rdm-submit:hover { background: var(--purpll); }
+.rdm-msg { font-size: .8rem; display: none; margin-top: 2px; }
+.rdm-msg.ok  { display: block; color: var(--green); }
+.rdm-msg.err { display: block; color: var(--red); }
+
+/* Trending badge */
+.trending-badge {
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  font-size: .55rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 100px;
+  background: rgba(245,158,11,.2); color: #f59e0b;
+  border: 1px solid rgba(245,158,11,.4);
+}
+.new-badge {
+  position: absolute; top: 8px; left: 8px; z-index: 2;
+  font-size: .55rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 100px;
+  background: rgba(16,185,129,.2); color: #10b981;
+  border: 1px solid rgba(16,185,129,.4);
+}
+.cc { position: relative; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <a href="../site/index.html" class="nav-logo">
+    <img src="../site/assets/icons/logo.svg" alt="AetherVex">
+    <span class="nav-logo-text">AETHER CLIENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="../site/index.html">Início</a>
+    <a href="./index.html" class="active">Loja</a>
+    <a href="../site/index.html#features">Recursos</a>
+    <a href="../site/index.html#download">Download</a>
+  </nav>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-drawer" id="mobileNav">
+  <a href="../site/index.html">🏠 Início</a>
+  <a href="./index.html">🛒 Loja</a>
+  <a href="../site/index.html#download">⬇ Download</a>
+</nav>
+
+<!-- HERO -->
+<section class="store-hero">
+  <div class="store-hero-bg"></div>
+  <div class="store-hero-content">
+    <div class="sec-eyebrow">✦ Loja Oficial</div>
+    <h1 class="sec-title" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:10px">
+      50 Cosméticos <span>Premium</span>
+    </h1>
+    <p style="color:var(--dim);font-size:.95rem;margin-bottom:20px;max-width:480px">
+      Asas animadas, capas exclusivas, auras, máscaras e muito mais.<br>
+      Compre, receba um código e resgate no launcher ou direto no jogo.
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="../site/index.html#download" class="btn-s">⬇ Baixar Launcher</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div style="background:rgba(10,7,32,.8);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:16px clamp(20px,5vw,80px)">
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">50</div><div class="stat-label">Cosméticos</div></div>
+    <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">Categorias</div></div>
+    <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">Raridades</div></div>
+    <div class="stat-item"><div class="stat-num">R$4,90</div><div class="stat-label">A partir de</div></div>
+  </div>
+</div>
+
+<!-- VIP PLANS -->
+<section class="section">
+  <div class="sec-row">
+    <div>
+      <div class="sec-eyebrow">Cargos Especiais</div>
+      <h2 class="sec-title">VIPs &amp; <span>TAGS</span></h2>
+    </div>
+  </div>
+  <div class="vip-grid" id="vipGrid"></div>
+</section>
+
+<!-- COSMETICS SECTION -->
+<section class="section section-dark" id="cosmetics">
+  <div class="sec-row">
+    <div>
+      <div class="sec-eyebrow">Coleção Completa</div>
+      <h2 class="sec-title">Cosméticos <span>Exclusivos</span></h2>
+    </div>
+    <div style="font-size:.84rem;color:var(--dim)" id="countLabel">50 itens</div>
+  </div>
+
+  <!-- Search + Filters -->
+  <div class="search-row">
+    <input class="search-input" id="searchInput" type="search" placeholder="🔍  Buscar cosmético...">
+    <div id="catFilters" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+  </div>
+
+  <!-- Rarity filters -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px" id="rarFilters"></div>
+
+  <!-- Trending shelf -->
+  <div id="trendingShelf">
+    <div class="shelf-label">🔥 Em Alta <span></span></div>
+    <div class="cosm-grid" id="trendingGrid" style="margin-bottom:36px"></div>
+  </div>
+
+  <!-- New shelf -->
+  <div id="newShelf">
+    <div class="shelf-label">✨ Recém-Adicionados <span></span></div>
+    <div class="cosm-grid" id="newGrid" style="margin-bottom:36px"></div>
+  </div>
+
+  <!-- All items -->
+  <div class="shelf-label" id="allLabel">Todos os Itens <span></span></div>
+  <div class="cosm-grid" id="mainGrid"></div>
+  <div id="noResults" style="display:none;text-align:center;padding:40px;color:var(--muted)">
+    Nenhum cosmético encontrado para essa busca.
+  </div>
+</section>
+
+<!-- REDEEM SECTION -->
+<section class="section" style="text-align:center">
+  <div class="sec-eyebrow">Já comprou?</div>
+  <h2 class="sec-title" style="margin-bottom:12px">Resgatar <span>Código</span></h2>
+  <p class="sec-sub" style="margin:0 auto 24px">Insira seu código de resgate para adicionar o cosmético ao inventário.</p>
+  <div style="max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:10px">
+    <input class="rdm-inp" id="globalRdmInp" placeholder="Ex: AE8X-4Q91-MNZK-3T7F" maxlength="20" style="text-align:center;font-size:1rem;padding:14px">
+    <button class="btn-p" onclick="globalRedeem()" style="justify-content:center">✦ Resgatar Código</button>
+    <div class="rdm-msg" id="globalRdmMsg"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-logo">AETHER CLIENT v2.1.1</div>
+  <div class="ft-links">
+    <a href="../site/index.html">Home</a>
+    <a href="./index.html">Loja</a>
+    <a href="../site/index.html#download">Download</a>
+    <a href="https://github.com/AetherVexClient" target="_blank">GitHub</a>
+  </div>
+  <div class="ft-copy">© 2025 AetherVex Team. Não afiliado à Mojang/Microsoft.</div>
+</footer>
+
+<!-- ITEM MODAL -->
+<div class="modal-overlay" id="itemModal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('itemModal').classList.remove('open')">✕</button>
+    <img class="modal-img" id="mImg" src="" alt="">
+    <div class="modal-rar" id="mRar"></div>
+    <div class="modal-name" id="mName"></div>
+    <div class="modal-desc" id="mDesc"></div>
+    <div class="modal-price" id="mPrice"></div>
+    <div class="rdm-form">
+      <div class="rdm-label">Resgatar código</div>
+      <div class="rdm-inp-row">
+        <input class="rdm-inp" id="mRdmInp" placeholder="AE8X-4Q91-..." maxlength="20">
+        <button class="rdm-submit" onclick="modalRedeem()">OK</button>
+      </div>
+      <div class="rdm-msg" id="mRdmMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+'use strict';
+const BACKEND     = 'https://aether-backend.onrender.com';
+const COSM_IMGS   = './assets/cosmetics';
+
+// ── Full 50-item catalog ───────────────────────────────────
+const CATALOG = [
+  {id:'aether_wings_001',  name:'Aether Wings',        cat:'wings',    rarity:'Mythic',    price:79.90,  desc:'Asas cósmicas do núcleo Aether com partículas de matéria escura.',     trending:true,  isNew:false},
+  {id:'shadow_wings_002',  name:'Shadow Wings',         cat:'wings',    rarity:'Legendary', price:69.90,  desc:'Asas das sombras com contorno neon roxo.',                             trending:true,  isNew:false},
+  {id:'solar_wings_003',   name:'Solar Flare Wings',    cat:'wings',    rarity:'Epic',      price:44.90,  desc:'Asas incandescentes do núcleo solar.',                                 trending:false, isNew:false},
+  {id:'frost_wings_004',   name:'Frost Wings',          cat:'wings',    rarity:'Elite',     price:29.90,  desc:'Asas de gelo eterno com cristais brilhantes.',                         trending:false, isNew:false},
+  {id:'storm_wings_005',   name:'Storm Wings',          cat:'wings',    rarity:'Legendary', price:64.90,  desc:'Asas da tempestade com raios internos.',                               trending:true,  isNew:false},
+  {id:'void_wings_006',    name:'Void Wings',           cat:'wings',    rarity:'Mythic',    price:84.90,  desc:'Asas do vazio absoluto — absorvem a luz ao redor.',                    trending:false, isNew:true },
+  {id:'crystal_wings_007', name:'Crystal Wings',        cat:'wings',    rarity:'Premium',   price:14.90,  desc:'Asas translúcidas de cristal puro.',                                   trending:false, isNew:false},
+  {id:'dragon_wings_008',  name:'Dragon Wings',         cat:'wings',    rarity:'Exclusive', price:149.90, desc:'Asas do dragão ancestral dos reinos élficos.',                         trending:true,  isNew:true },
+  {id:'angel_wings_009',   name:'Angel Wings',          cat:'wings',    rarity:'Celestial', price:99.90,  desc:'Asas angelicais com luz divina emanando das penas.',                   trending:false, isNew:false},
+  {id:'neon_wings_010',    name:'Neon Wings',           cat:'wings',    rarity:'Epic',      price:39.90,  desc:'Asas de energia neon com rastro de luz.',                              trending:false, isNew:true },
+  {id:'void_cloak_011',    name:'Void Emperor Cloak',   cat:'cloaks',   rarity:'Exclusive', price:119.90, desc:'Capa do imperador do vazio, bordada com runas ancestrais.',             trending:true,  isNew:false},
+  {id:'astral_cloak_012',  name:'Astral Cloak',         cat:'cloaks',   rarity:'Celestial', price:89.90,  desc:'Capa tecida de matéria estelar — muda de cor com o tempo.',            trending:false, isNew:false},
+  {id:'shadow_cloak_013',  name:'Shadow Cloak',         cat:'cloaks',   rarity:'Legendary', price:64.90,  desc:'A capa perfeita para o assassino das sombras.',                        trending:false, isNew:false},
+  {id:'frost_veil_014',    name:'Frost Veil',           cat:'cloaks',   rarity:'Epic',      price:34.90,  desc:'Véu glacial que deixa rastros de gelo no chão.',                       trending:false, isNew:false},
+  {id:'crimson_cloak_015', name:'Crimson Cloak',        cat:'cloaks',   rarity:'Elite',     price:24.90,  desc:'Capa carmesim de veludo nobre.',                                       trending:false, isNew:false},
+  {id:'mystic_cloak_016',  name:'Mystic Cloak',         cat:'cloaks',   rarity:'Premium',   price:12.90,  desc:'Capa mística com padrões arcanos bordados.',                           trending:false, isNew:false},
+  {id:'night_cloak_017',   name:'Night Cloak',          cat:'cloaks',   rarity:'Standard',  price:4.90,   desc:'Capa simples da noite — um clássico elegante.',                        trending:false, isNew:false},
+  {id:'phoenix_cloak_018', name:'Phoenix Cloak',        cat:'cloaks',   rarity:'Mythic',    price:94.90,  desc:'Capa de fênix que emite calor visível.',                               trending:true,  isNew:true },
+  {id:'neon_cap_019',      name:'Neon Hacker Cap',      cat:'hats',     rarity:'Epic',      price:19.90,  desc:'Boné neon roxo estilo hacker cyberpunk.',                              trending:false, isNew:false},
+  {id:'urban_cap_020',     name:'Urban Cap',            cat:'hats',     rarity:'Standard',  price:4.90,   desc:'Boné urbano clássico em preto.',                                       trending:false, isNew:false},
+  {id:'royal_tophat_021',  name:'Royal Top Hat',        cat:'hats',     rarity:'Elite',     price:27.90,  desc:'Cartola real dourada com faixa de cetim.',                             trending:false, isNew:false},
+  {id:'astral_beanie_022', name:'Astral Beanie',        cat:'hats',     rarity:'Premium',   price:9.90,   desc:'Gorro astral com estrelas brilhantes bordadas.',                       trending:false, isNew:false},
+  {id:'dragon_helm_023',   name:'Dragon Helm',          cat:'hats',     rarity:'Legendary', price:69.90,  desc:'Capacete de dragão forjado em chamas eternas.',                        trending:true,  isNew:false},
+  {id:'cyber_hood_024',    name:'Cyber Hood',           cat:'hats',     rarity:'Elite',     price:24.90,  desc:'Capuz cyberpunk com visor LED integrado.',                             trending:false, isNew:true },
+  {id:'oni_mask_025',      name:'Oni Mask',             cat:'masks',    rarity:'Elite',     price:22.90,  desc:'Máscara de oni japonesa com detalhes em ouro.',                        trending:false, isNew:false},
+  {id:'phantom_mask_026',  name:'Phantom Mask',         cat:'masks',    rarity:'Legendary', price:59.90,  desc:'Máscara do fantasma da ópera reinterpretada.',                         trending:false, isNew:false},
+  {id:'cyber_mask_027',    name:'Cyber Mask',           cat:'masks',    rarity:'Epic',      price:34.90,  desc:'Máscara cyber com display de dados holográfico.',                      trending:true,  isNew:false},
+  {id:'death_mask_028',    name:'Death Mask',           cat:'masks',    rarity:'Mythic',    price:89.90,  desc:'A máscara da morte — usada apenas pelos escolhidos.',                  trending:false, isNew:false},
+  {id:'fox_mask_029',      name:'Fox Mask',             cat:'masks',    rarity:'Premium',   price:14.90,  desc:'Máscara de raposa tradicional japonesa kitsune.',                      trending:false, isNew:false},
+  {id:'dragon_mask_030',   name:'Dragon Mask',          cat:'masks',    rarity:'Exclusive', price:129.90, desc:'Máscara de dragão mítico com olhos que brilham.',                      trending:true,  isNew:true },
+  {id:'astral_band_031',   name:'Astral Bandana',       cat:'bandanas', rarity:'Celestial', price:44.90,  desc:'Bandana feita de tecido celestial com padrões de estrelas.',           trending:false, isNew:false},
+  {id:'neon_band_032',     name:'Neon Bandana',         cat:'bandanas', rarity:'Premium',   price:9.90,   desc:'Bandana neon com luz própria no escuro.',                              trending:false, isNew:false},
+  {id:'void_band_033',     name:'Void Bandana',         cat:'bandanas', rarity:'Legendary', price:54.90,  desc:'Bandana do vazio que absorve a luz ao redor.',                         trending:false, isNew:false},
+  {id:'flame_band_034',    name:'Flame Bandana',        cat:'bandanas', rarity:'Elite',     price:19.90,  desc:'Bandana com chamas que nunca se apagam.',                              trending:false, isNew:false},
+  {id:'shadow_band_035',   name:'Shadow Bandana',       cat:'bandanas', rarity:'Epic',      price:29.90,  desc:'Bandana das sombras invisível na escuridão.',                          trending:false, isNew:true },
+  {id:'divine_aura_036',   name:'Divine Halo Aura',     cat:'auras',    rarity:'Celestial', price:64.90,  desc:'Aura com halo divino de luz pura acima da cabeça.',                    trending:true,  isNew:false},
+  {id:'astral_aura_037',   name:'Astral Aura',          cat:'auras',    rarity:'Celestial', price:54.90,  desc:'Aura astral que projeta a silhueta do jogador.',                       trending:false, isNew:false},
+  {id:'plasma_aura_038',   name:'Plasma Aura',          cat:'auras',    rarity:'Epic',      price:39.90,  desc:'Aura de plasma superaquecido com partículas vivas.',                   trending:false, isNew:false},
+  {id:'void_aura_039',     name:'Void Aura',            cat:'auras',    rarity:'Mythic',    price:84.90,  desc:'Aura do vazio — distorce a realidade ao redor.',                       trending:true,  isNew:false},
+  {id:'flame_aura_040',    name:'Flame Aura',           cat:'auras',    rarity:'Legendary', price:59.90,  desc:'Aura de chamas vivas que acompanham cada movimento.',                  trending:false, isNew:true },
+  {id:'void_suit_041',     name:'Void Emperor Suit',    cat:'suits',    rarity:'Exclusive', price:159.90, desc:'Armadura completa do imperador do vazio.',                             trending:true,  isNew:false},
+  {id:'cyber_suit_042',    name:'Cyber Suit',           cat:'suits',    rarity:'Legendary', price:74.90,  desc:'Armadura cyberpunk com HUD integrado.',                               trending:false, isNew:false},
+  {id:'astral_suit_043',   name:'Astral Suit',          cat:'suits',    rarity:'Mythic',    price:99.90,  desc:'Armadura astral forjada nas estrelas.',                               trending:false, isNew:true },
+  {id:'shadow_suit_044',   name:'Shadow Suit',          cat:'suits',    rarity:'Epic',      price:44.90,  desc:'Armadura das sombras que se funde ao escuro.',                         trending:false, isNew:false},
+  {id:'royal_crown_045',   name:'Royal Crown',          cat:'crowns',   rarity:'Legendary', price:69.90,  desc:'Coroa real dourada com gemas preciosas.',                              trending:false, isNew:false},
+  {id:'void_crown_046',    name:'Void Crown',           cat:'crowns',   rarity:'Mythic',    price:94.90,  desc:'Coroa forjada no coração do vazio — emite escuridão.',                 trending:true,  isNew:false},
+  {id:'diamond_crown_047', name:'Diamond Crown',        cat:'crowns',   rarity:'Celestial', price:109.90, desc:'Coroa de diamante celestial com brilho inigualável.',                  trending:false, isNew:true },
+  {id:'gold_chain_048',    name:'Gold Chain',           cat:'necklaces',rarity:'Premium',   price:12.90,  desc:'Corrente dourada fina e elegante.',                                    trending:false, isNew:false},
+  {id:'aether_chain_049',  name:'Aether Chain',         cat:'necklaces',rarity:'Legendary', price:59.90,  desc:'Corrente Aether com gemas que pulsam de energia.',                     trending:false, isNew:false},
+  {id:'dragon_chain_050',  name:'Dragon Chain',         cat:'necklaces',rarity:'Elite',     price:22.90,  desc:'Corrente forjada com escamas de dragão ancestral.',                    trending:false, isNew:false},
+];
+
+const CAT_LABELS = {
+  all:'Todos',wings:'Asas',cloaks:'Capas',hats:'Chapéus',masks:'Máscaras',
+  bandanas:'Bandanas',auras:'Auras',suits:'Armaduras',crowns:'Coroas',necklaces:'Correntes'
+};
+const RAR_COLORS = {
+  Mythic:'#ef4444',Legendary:'#f59e0b',Epic:'#a855f7',Elite:'#3b82f6',
+  Celestial:'#22d3ee',Premium:'#10b981',Standard:'#9ca3af',Exclusive:'#fbbf24'
+};
+const RAR_ORDER = ['Exclusive','Mythic','Celestial','Legendary','Epic','Elite','Premium','Standard'];
+
+const VIPS = [
+  {name:'VIP',     price:'R$ 14,90',period:'/mês',  perks:['Tag §e[VIP]§r no chat','5 cosméticos exclusivos','Suporte prioritário'],     tagBg:'rgba(245,158,11,.2)', tagColor:'#f59e0b', cls:'vip-vip'},
+  {name:'ELITE',   price:'R$ 29,90',period:'/mês',  perks:['Tag §b[ELITE]§r no chat','15 cosméticos exclusivos','Acesso antecipado'],    tagBg:'rgba(168,85,247,.2)', tagColor:'#a855f7', cls:'vip-elite'},
+  {name:'ULTRA',   price:'R$ 59,90',period:'/mês',  perks:['Tag §c[ULTRA]§r no chat','Todos os cosméticos','Badge permanente'],          tagBg:'rgba(239,68,68,.2)',  tagColor:'#ef4444', cls:'vip-ultra'},
+  {name:'OWNER',   price:'STAFF',   period:'',       perks:['Tag §3[OWNER]§r no chat','Acesso total','Cosméticos ilimitados'],           tagBg:'rgba(34,211,238,.2)', tagColor:'#22d3ee', cls:'vip-owner'},
+];
+
+let activeCategory = 'all';
+let activeRarity   = 'all';
+let searchQuery    = '';
+let selectedItem   = null;
+
+// ── Init ────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderVips();
+  renderCategoryFilters();
+  renderRarityFilters();
+  renderAllGrids();
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    renderAllGrids();
+  });
+  document.getElementById('hamburger').addEventListener('click', () =>
+    document.getElementById('mobileNav').classList.toggle('open')
+  );
+});
+
+function renderVips() {
+  document.getElementById('vipGrid').innerHTML = VIPS.map(v => `
+    <div class="vip-card ${v.cls}">
+      <span class="vip-tag" style="background:${v.tagBg};color:${v.tagColor}">${v.name}</span>
+      <div class="vip-price">${v.price}</div>
+      <div class="vip-period">${v.period}</div>
+      <ul class="vip-perks">
+        ${v.perks.map(p => `<li>${p.replace(/§./g,'')}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function renderCategoryFilters() {
+  const cats = ['all','wings','cloaks','hats','masks','bandanas','auras','suits','crowns','necklaces'];
+  document.getElementById('catFilters').innerHTML = cats.map(c => `
+    <button class="filter-btn ${c===activeCategory?'active':''}" onclick="setCat('${c}',this)">
+      ${CAT_LABELS[c]}
+    </button>
+  `).join('');
+}
+
+function renderRarityFilters() {
+  const rars = ['all',...RAR_ORDER];
+  document.getElementById('rarFilters').innerHTML = rars.map(r => `
+    <button class="filter-btn ${r===activeRarity?'active':''}"
+      style="${r!=='all'?`--dot:${RAR_COLORS[r]};`:''}color:${r!=='all'&&r===activeRarity?RAR_COLORS[r]||'#fff':''};"
+      onclick="setRar('${r}',this)">
+      ${r==='all'?'Todas raridades':r}
+    </button>
+  `).join('');
+}
+
+function setCat(cat, btn) {
+  activeCategory = cat;
+  document.querySelectorAll('#catFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAllGrids();
+}
+function setRar(rar, btn) {
+  activeRarity = rar;
+  document.querySelectorAll('#rarFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAllGrids();
+}
+
+function filteredItems() {
+  return CATALOG.filter(c => {
+    if (activeCategory !== 'all' && c.cat !== activeCategory) return false;
+    if (activeRarity   !== 'all' && c.rarity !== activeRarity) return false;
+    if (searchQuery && !c.name.toLowerCase().includes(searchQuery) &&
+        !c.rarity.toLowerCase().includes(searchQuery) &&
+        !CAT_LABELS[c.cat]?.toLowerCase().includes(searchQuery)) return false;
+    return true;
+  });
+}
+
+function renderAllGrids() {
+  const items  = filteredItems();
+  const isFiltering = activeCategory !== 'all' || activeRarity !== 'all' || searchQuery;
+
+  // Trending & New only when not filtering
+  const trendSec = document.getElementById('trendingShelf');
+  const newSec   = document.getElementById('newShelf');
+  const allLabel = document.getElementById('allLabel');
+
+  if (isFiltering) {
+    trendSec.style.display = 'none';
+    newSec.style.display   = 'none';
+    allLabel.style.display = 'none';
+  } else {
+    trendSec.style.display = '';
+    newSec.style.display   = '';
+    allLabel.style.display = '';
+    renderGrid('trendingGrid', CATALOG.filter(c => c.trending).slice(0, 6));
+    renderGrid('newGrid',      CATALOG.filter(c => c.isNew).slice(0, 6));
+  }
+
+  renderGrid('mainGrid', items);
+  document.getElementById('countLabel').textContent = items.length + ' itens';
+  document.getElementById('noResults').style.display = items.length ? 'none' : 'block';
+}
+
+function renderGrid(id, items) {
+  document.getElementById(id).innerHTML = items.map(c => cardHTML(c)).join('');
+}
+
+function cardHTML(c) {
+  const col = RAR_COLORS[c.rarity] || '#9ca3af';
+  const rarLow = c.rarity.toLowerCase();
+  return `
+    <div class="cc" onclick="openModal('${c.id}')">
+      ${c.trending ? '<span class="trending-badge">🔥 TRENDING</span>' : ''}
+      ${c.isNew    ? '<span class="new-badge">✨ NOVO</span>' : ''}
+      <div class="cc-img">
+        <img src="${COSM_IMGS}/${c.id}.svg" alt="${c.name}" loading="lazy"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="cc-strip rs-${rarLow}"></div>
+      <div class="cc-body">
+        <div class="cc-rar" style="color:${col}">${c.rarity}</div>
+        <div class="cc-name">${c.name}</div>
+        <div class="cc-cat">${CAT_LABELS[c.cat]||c.cat}</div>
+        <div class="cc-foot">
+          <span class="cc-price">R$ ${c.price.toFixed(2).replace('.',',')}</span>
+          <button class="cc-buy" onclick="event.stopPropagation();openModal('${c.id}')">Ver</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Modal ────────────────────────────────────────────────────
+function openModal(id) {
+  const c = CATALOG.find(x => x.id === id);
+  if (!c) return;
+  selectedItem = c;
+  const col = RAR_COLORS[c.rarity] || '#a855f7';
+  document.getElementById('mImg').src   = `${COSM_IMGS}/${c.id}.svg`;
+  document.getElementById('mRar').textContent  = c.rarity;
+  document.getElementById('mRar').style.color  = col;
+  document.getElementById('mName').textContent = c.name;
+  document.getElementById('mDesc').textContent = c.desc;
+  document.getElementById('mPrice').textContent = `R$ ${c.price.toFixed(2).replace('.',',')}`;
+  document.getElementById('mPrice').style.color = col;
+  document.getElementById('mRdmInp').value = '';
+  const msg = document.getElementById('mRdmMsg');
+  msg.className = 'rdm-msg'; msg.textContent = '';
+  document.getElementById('itemModal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target.id === 'itemModal') document.getElementById('itemModal').classList.remove('open');
+}
+
+// ── Redeem ────────────────────────────────────────────────────
+async function modalRedeem() {
+  const code = document.getElementById('mRdmInp').value.trim().toUpperCase();
+  const msg  = document.getElementById('mRdmMsg');
+  if (!code || code.length < 8) {
+    msg.className = 'rdm-msg err'; msg.textContent = 'Código inválido.'; return;
+  }
+  msg.className = 'rdm-msg ok'; msg.textContent = '⏳ Validando...';
+  try {
+    const r = await fetch(`${BACKEND}/store/redeem`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ code, userId: 'web_user' })
+    });
+    const d = await r.json();
+    if (d.success) {
+      msg.className = 'rdm-msg ok';
+      msg.textContent = `✅ ${d.item || 'Item'} resgatado! Abra o launcher para equipar.`;
+      toast('✅ Cosmético resgatado!');
+    } else {
+      msg.className = 'rdm-msg err';
+      msg.textContent = d.message || '❌ Código inválido.';
+    }
+  } catch {
+    msg.className = 'rdm-msg err';
+    msg.textContent = '❌ Erro de conexão. Tente mais tarde.';
+  }
+}
+
+async function globalRedeem() {
+  const code = document.getElementById('globalRdmInp').value.trim().toUpperCase();
+  const msg  = document.getElementById('globalRdmMsg');
+  if (!code || code.length < 8) {
+    msg.className = 'rdm-msg err'; msg.textContent = 'Código inválido.'; return;
+  }
+  msg.className = 'rdm-msg ok'; msg.textContent = '⏳ Validando...';
+  try {
+    const r = await fetch(`${BACKEND}/store/redeem`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ code, userId: 'web_user' })
+    });
+    const d = await r.json();
+    if (d.success) {
+      msg.className = 'rdm-msg ok';
+      msg.textContent = `✅ ${d.item || 'Item'} resgatado com sucesso!`;
+      toast('✅ Cosmético resgatado!');
+    } else {
+      msg.className = 'rdm-msg err';
+      msg.textContent = d.message || '❌ Código inválido ou já utilizado.';
+    }
+  } catch {
+    msg.className = 'rdm-msg err';
+    msg.textContent = '❌ Erro de conexão. Tente mais tarde.';
+  }
+}
+
+// ── Toast ────────────────────────────────────────────────────
+function toast(msg, type='ok') {
+  const tc = document.getElementById('toast-container');
+  const t  = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  tc.appendChild(t);
+  setTimeout(() => t.remove(), 3100);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <radialGradient id="bgMain" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0d0d28"/>
+      <stop offset="100%" stop-color="#020208"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#bgMain)"/>
+  <g opacity="0.5">
+    <circle cx="56.2" cy="203.1" r="1.5" fill="white" opacity="0.59"/>
+    <circle cx="70.5" cy="231.9" r="1.7" fill="white" opacity="0.61"/>
+    <circle cx="151.4" cy="76.1" r="0.5" fill="white" opacity="0.52"/>
+    <circle cx="173.9" cy="29.4" r="1.7" fill="white" opacity="0.44"/>
+    <circle cx="75.2" cy="21.9" r="2.0" fill="white" opacity="0.74"/>
+    <circle cx="255.0" cy="182.4" r="0.6" fill="white" opacity="0.50"/>
+    <circle cx="149.3" cy="42.4" r="1.9" fill="white" opacity="0.52"/>
+    <circle cx="53.3" cy="238.9" r="0.7" fill="white" opacity="0.86"/>
+    <circle cx="136.9" cy="164.6" r="1.0" fill="white" opacity="0.59"/>
+    <circle cx="62.3" cy="20.4" r="1.8" fill="white" opacity="0.44"/>
+    <circle cx="228.5" cy="68.4" r="2.0" fill="white" opacity="0.84"/>
+    <circle cx="221.3" cy="223.6" r="1.4" fill="white" opacity="0.74"/>
+    <circle cx="44.3" cy="143.4" r="1.7" fill="white" opacity="0.42"/>
+    <circle cx="268.5" cy="258.5" r="1.1" fill="white" opacity="0.52"/>
+    <circle cx="136.4" cy="118.0" r="2.0" fill="white" opacity="0.53"/>
+    <circle cx="17.5" cy="36.1" r="1.6" fill="white" opacity="0.90"/>
+    <circle cx="148.9" cy="147.6" r="1.3" fill="white" opacity="0.75"/>
+    <circle cx="72.2" cy="180.5" r="1.3" fill="white" opacity="0.67"/>
+    <circle cx="60.6" cy="57.6" r="1.0" fill="white" opacity="0.86"/>
+    <circle cx="107.1" cy="177.2" r="1.0" fill="white" opacity="0.36"/>
+    <circle cx="28.4" cy="237.8" r="1.7" fill="white" opacity="0.52"/>
+    <circle cx="201.3" cy="199.3" r="1.8" fill="white" opacity="0.87"/>
+    <circle cx="124.0" cy="287.0" r="1.9" fill="white" opacity="0.65"/>
+    <circle cx="257.3" cy="147.5" r="1.1" fill="white" opacity="0.45"/>
+    <circle cx="255.3" cy="55.4" r="0.6" fill="white" opacity="0.78"/>
+    <circle cx="226.7" cy="145.3" r="1.8" fill="white" opacity="0.33"/>
+    <circle cx="82.2" cy="91.2" r="1.1" fill="white" opacity="0.40"/>
+    <circle cx="29.4" cy="104.7" r="1.8" fill="white" opacity="0.89"/>
+    <circle cx="218.8" cy="144.1" r="0.9" fill="white" opacity="0.88"/>
+    <circle cx="157.2" cy="214.0" r="0.5" fill="white" opacity="0.43"/>
+    <circle cx="244.7" cy="232.7" r="1.8" fill="white" opacity="0.66"/>
+    <circle cx="129.3" cy="172.7" r="1.8" fill="white" opacity="0.48"/>
+    <circle cx="159.6" cy="87.3" r="1.7" fill="white" opacity="0.31"/>
+    <circle cx="201.9" cy="277.1" r="0.5" fill="white" opacity="0.66"/>
+    <circle cx="190.3" cy="248.5" r="1.4" fill="white" opacity="0.45"/>
+  </g>
+  <defs>
+    <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a0a1a" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#0a1628" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a1628" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.7"/>
+    </linearGradient>
+    <radialGradient id="hglow" cx="150" cy="145" r="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="rgba(34,211,238,0.55)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="hf" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2.2 0" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <ellipse cx="150" cy="145" rx="70" ry="55" fill="url(#hglow)" opacity="0.35"/>
+  <g fill="#1a1a2e" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1">
+    <rect x="138.0" y="152.0" width="24.0" height="24.0"/>
+    <rect x="138.0" y="176.0" width="24.0" height="32.0"/>
+    <rect x="130.0" y="176.0" width="8.0" height="28.0"/>
+    <rect x="162.0" y="176.0" width="8.0" height="28.0"/>
+    <rect x="138.0" y="208.0" width="11.0" height="28.0"/>
+    <rect x="151.0" y="208.0" width="11.0" height="28.0"/>
+  </g>
+  <path d="M 112 153 Q 115 90 150 85 Q 185 90 188 153 Z" fill="url(#hg2)" filter="url(#hf)"/>
+  <rect x="102" y="151" width="96" height="14" rx="5" fill="url(#hg1)" filter="url(#hf)"/>
+  <rect x="112" y="145" width="76" height="10" fill="#22d3ee" opacity="0.7"/>
+  <rect x="0" y="265" width="300" height="35" fill="#050510" opacity="0.85"/>
+  <text x="150" y="281" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#10b981">Astral Beanie</text>
+  <text x="150" y="294" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#10b981">PREMIUM</text>
+  <rect x="1" y="1" width="298" height="298" rx="10" fill="none" stroke="#10b981" stroke-width="2" opacity="0.5"/>
+</svg>
